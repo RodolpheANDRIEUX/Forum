@@ -6,22 +6,23 @@ import (
 	"os"
 )
 
-func Initserver() {
+func Serve() {
 	router := gin.Default()
 
-	// Charger les templates HTML
+	// parse assets and templates
+	router.Static("/web", "./web")
 	router.LoadHTMLGlob("web/*.html")
 
-	// sert pour  les fichiers JavaScript
-	router.Static("/web", "./web")
-
-	// lier au fichier de log
+	// create log file
 	f, _ := os.Create("gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
 
+	// routes
 	InitRoutes(router)
+	Routes(router)
 
-	err := router.Run(":8080")
+	// run
+	err := router.Run()
 	if err != nil {
 		panic(err)
 	}

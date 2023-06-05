@@ -1,7 +1,8 @@
-package internal
+package middleware
 
 import (
 	"fmt"
+	"forum/internal/database"
 	"forum/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -33,7 +34,7 @@ func RequireAuth(c *gin.Context) {
 
 		// Find the user with token sub
 		var user models.User
-		initianlizers.DB.First(&user, claims["subject"])
+		database.DB.First(&user, claims["subject"])
 
 		if user.ID == 0 {
 			c.AbortWithStatus(http.StatusUnauthorized)

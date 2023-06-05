@@ -1,13 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"forum/internal/database"
+	"forum/internal/initianlizers"
 	"forum/internal/server"
 )
 
+func init() {
+	initianlizers.LoadEnvVariables()
+	database.ConnectToDb()
+	database.SyncDatabase()
+}
+
 func main() {
-	fmt.Println("http://localhost:8080/")
-	database.InitDB()
-	server.Initserver()
+	server.Serve()
 }
