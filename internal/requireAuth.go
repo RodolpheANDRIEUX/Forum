@@ -1,9 +1,8 @@
-package middleware
+package internal
 
 import (
 	"fmt"
-	"forum/initianlizers"
-	"forum/models"
+	"forum/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"

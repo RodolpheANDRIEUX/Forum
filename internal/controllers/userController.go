@@ -1,8 +1,7 @@
 package controllers
 
 import (
-	"forum/initianlizers"
-	"forum/models"
+	"forum/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -10,6 +9,8 @@ import (
 	"os"
 	"time"
 )
+
+//@todo : refaire les requetes
 
 func Signup(c *gin.Context) {
 	// Get the username/email/password
