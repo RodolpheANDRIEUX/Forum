@@ -40,7 +40,7 @@ func RequireAuth(c *gin.Context) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 		// Attach to req
-		c.Set("user", user)
+		c.Set("user", user.ID)
 
 		// Continue
 		c.Next()

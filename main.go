@@ -1,9 +1,8 @@
 package main
 
 import (
-	"forum/controllers"
 	"forum/initianlizers"
-	"forum/middleware"
+	"forum/routes"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,13 +13,11 @@ func init() {
 }
 
 func main() {
-	r := gin.Default()
+	router := gin.Default()
 
-	r.POST("/signup", controllers.Signup)
-	r.GET("/login", controllers.Login)
-	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
+	routes.Routes(router)
 
-	err := r.Run()
+	err := router.Run()
 	if err != nil {
 		return
 	}
