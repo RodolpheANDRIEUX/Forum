@@ -9,6 +9,7 @@ import (
 
 func Routes(router *gin.Engine) {
 	router.LoadHTMLGlob("views/*")
+	router.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", nil) })
 
 	router.GET("/signup", func(c *gin.Context) { c.HTML(http.StatusOK, "signup.html", nil) })
 	router.POST("/signup", controllers.Signup)
@@ -16,7 +17,7 @@ func Routes(router *gin.Engine) {
 	router.GET("/login", func(c *gin.Context) { c.HTML(http.StatusOK, "login.html", nil) })
 	router.POST("/login", controllers.Login)
 
-	router.GET("/user", middleware.RequireAuth, controllers.User)
+	router.GET("/logout", controllers.Logout)
 
-	router.GET("/validate", middleware.RequireAuth, controllers.Validate)
+	router.GET("/user", middleware.RequireAuth, controllers.User)
 }

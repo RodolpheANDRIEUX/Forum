@@ -92,16 +92,15 @@ func Login(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/user")
 }
 
-func Validate(c *gin.Context) {
-	user, _ := c.Get("user")
-	c.JSON(http.StatusOK, gin.H{
-		"message": user,
-	})
-}
-
 func User(c *gin.Context) {
 	var user models.User
 	id, _ := c.Get("user")
 	initianlizers.DB.First(&user, "id = ?", id)
 	c.HTML(http.StatusOK, "user.html", gin.H{"username": "user"})
+}
+
+func Logout(c *gin.Context) {
+	// Delete the cookie
+	c.SetCookie("Authorization", "", -1, "", "", true, true)
+	c.Redirect(http.StatusFound, "/")
 }
