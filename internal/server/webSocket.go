@@ -20,7 +20,6 @@ var Connections = make(map[*websocket.Conn]bool)
 var Mutex = &sync.Mutex{}
 
 func WebsocketHandler(c *gin.Context) {
-	fmt.Println("hello")
 
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
