@@ -96,3 +96,5 @@ $RECYCLE.BIN/
 .nfs*
 
 .env
+
+*.log
