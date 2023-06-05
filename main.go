@@ -16,7 +16,7 @@ func init() {
 func main() {
 	r := gin.Default()
 
-	r.GET("/signup", controllers.Signup)
+	r.POST("/signup", controllers.Signup)
 	r.GET("/login", controllers.Login)
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
 

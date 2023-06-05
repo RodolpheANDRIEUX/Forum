@@ -12,13 +12,12 @@ import (
 )
 
 func Signup(c *gin.Context) {
-	// Get the email/password
+	// Get the username/email/password
 	var body struct {
 		Username string
 		Email    string
 		Password string
 	}
-
 	if c.Bind(&body) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to read body",
@@ -37,12 +36,12 @@ func Signup(c *gin.Context) {
 	}
 
 	// Create the user
-	user := models.User{Username: body.Username, Email: body.Email, Password: string(hash)}
+	user := models.User{Role: "member", Username: body.Username, Email: body.Email, Password: string(hash)}
 	result := initianlizers.DB.Create(&user)
 
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to create user",
+			"error": "This user already exist",
 		})
 		return
 	}
@@ -52,8 +51,7 @@ func Signup(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	// Get the email and password off req body
-	// Get the email/password
+	// Get the username/email/password
 	var body struct {
 		Username string
 		Email    string
