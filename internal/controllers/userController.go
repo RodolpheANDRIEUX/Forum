@@ -1,7 +1,8 @@
 package controllers
 
 import (
-	"forum/internal/database"
+	"forum/internal/initializer"
+	"forum/internal/middleware"
 	"forum/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -30,7 +31,7 @@ func Signup(c *gin.Context) {
 	}
 	// Create the user
 	user := models.User{Role: "member", Username: body.Username, Email: body.Email, Password: string(hash)}
-	result := database.DB.Create(&user)
+	result := initializer.DB.Create(&user)
 	if result.Error != nil {
 		c.HTML(http.StatusBadRequest, "signup.html", gin.H{"error": "This user already exist"})
 		return
@@ -38,6 +39,7 @@ func Signup(c *gin.Context) {
 	// Respond
 	c.HTML(http.StatusOK, "user.html", gin.H{"username": body.Username})
 }
+
 func Login(c *gin.Context) {
 	// Get the username/email/password
 	var body struct {
@@ -50,7 +52,7 @@ func Login(c *gin.Context) {
 	}
 	// Look up requested user
 	var user models.User
-	database.DB.First(&user, "email = ?", body.Email)
+	initializer.DB.First(&user, "email = ?", body.Email)
 	if user.ID == 0 {
 		c.HTML(http.StatusBadRequest, "login.html", gin.H{"error": "User do not exist"})
 		return
@@ -63,8 +65,11 @@ func Login(c *gin.Context) {
 	}
 	// Generate a jwt
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"subject": user.ID,
-		"exp":     time.Now().Add(time.Hour * 24 * 10).Unix(),
+		"sub":   user.ID,
+		"user":  user.Username,
+		"email": user.Email,
+		"role":  user.Role,
+		"exp":   time.Now().Add(time.Hour * 24 * 10).Unix(),
 	})
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_JWT")))
@@ -77,12 +82,18 @@ func Login(c *gin.Context) {
 	c.SetCookie("Authorization", tokenString, 3600*24*10, "", "", true, true)
 	c.Redirect(http.StatusFound, "/user")
 }
+
 func User(c *gin.Context) {
-	var user models.User
-	id, _ := c.Get("user")
-	database.DB.First(&user, "id = ?", id)
-	c.HTML(http.StatusOK, "user.html", gin.H{"username": "user"})
+	user, err := middleware.ParseUser(c)
+
+	if err != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	c.HTML(http.StatusOK, "user.html", gin.H{"user": user})
 }
+
 func Logout(c *gin.Context) {
 	// Delete the cookie
 	c.SetCookie("Authorization", "", -1, "", "", true, true)

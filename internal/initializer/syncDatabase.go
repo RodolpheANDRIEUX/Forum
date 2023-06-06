@@ -1,4 +1,4 @@
-package database
+package initializer
 
 import (
 	"forum/internal/models"
