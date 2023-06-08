@@ -1,11 +1,10 @@
 package server
 
 import (
+	"forum/Log"
 	"forum/internal/initializer"
 	"github.com/gin-gonic/gin"
-	"io"
 	"log"
-	"os"
 )
 
 func Serve() {
@@ -26,7 +25,6 @@ func Serve() {
 
 	// set default log
 	log.SetOutput(gin.DefaultWriter)
-	errorLog := log.New(io.MultiWriter(logFile, os.Stderr), "[ERROR] ", log.LstdFlags)
 
 	// routes
 	InitRoutes(router)
@@ -36,7 +34,7 @@ func Serve() {
 	log.Println("running the server...")
 	err := router.Run()
 	if err != nil {
-		errorLog.Println(err)
+		Log.Err.Println(err)
 		panic(err)
 	}
 }

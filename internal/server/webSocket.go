@@ -1,7 +1,7 @@
 package server
 
 import (
-	"fmt"
+	"forum/Log"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +23,7 @@ func WebsocketHandler(c *gin.Context) {
 
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-		fmt.Println("Failed to set websocket upgrade:", err)
+		Log.Err.Println("Failed to set websocket upgrade:", err)
 		return
 	}
 
@@ -39,14 +39,14 @@ func WebsocketHandler(c *gin.Context) {
 		Mutex.Unlock()
 
 		if err := conn.Close(); err != nil {
-			fmt.Println("Failed to close connection:", err)
+			Log.Err.Println("Failed to close connection:", err)
 		}
 	}()
 
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
-			fmt.Println("Failed to read message:", err)
+			Log.Err.Println("Failed to read message:", err)
 			break
 		}
 
@@ -55,7 +55,7 @@ func WebsocketHandler(c *gin.Context) {
 		for conn := range Connections {
 			err = conn.WriteMessage(websocket.TextMessage, msg)
 			if err != nil {
-				fmt.Println("Failed to write message:", err)
+				Log.Err.Println("Failed to write message:", err)
 				delete(Connections, conn)
 			}
 		}
