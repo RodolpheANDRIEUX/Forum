@@ -1,0 +1,138 @@
+html {
+    background-image: url('../img/Leaves.png');
+    background-size: 100% auto;
+    background-repeat: repeat;
+    background-color: #10141B;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+ul{
+    list-style: none;
+}
+
+body::-webkit-scrollbar {
+    width: 0;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+header {
+    position: relative;
+    height: 63px;
+    backdrop-filter: blur(12px);
+}
+
+#header-border {
+    position: absolute;
+    background-color: #D8F3DC;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    box-shadow: 0 0 10px #D8F3DC;
+}
+
+#header-logo {
+    height: 100%;
+}
+
+/* LEFT MENU */
+
+.sidebar-left {
+    grid-column: 1 / 2;
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    border: dashed green 2px;
+}
+
+.sidebar-left ul {
+    padding: 0 0 0 10%;
+    margin: 10px;
+}
+
+.sidebar-left ul img {
+    width: 11%;
+}
+
+.sidebar-left ul li {
+    margin-bottom: 22px;
+}
+
+.sidebar-left ul li a {
+    font-size: 26px;
+    color: #F3D8EF;
+    font-family: "police", sans-serif;
+    text-shadow: 0 0 10px #F3D8EF;
+    text-decoration: none;
+    margin: 0 0 0 10%;
+}
+
+.sidebar-left ul li a span{
+    font-size: 34px;
+}
+
+#main-logo{
+    margin-top: 8px;
+    width: 85%;
+}
+
+/* MAIN CONTENT */
+
+#background {
+    width: 150%;
+    height: 100%;
+    background-color: #10141B;
+    filter: blur(150px);
+    z-index: -1;
+    margin-left: -25%;
+    margin-right: -25%;
+}
+
+.main-content {
+    grid-column: 2 / 3;
+    border: dashed blue 2px;
+    height: 3000px;
+    display: flex;
+    justify-content: center;
+}
+
+/* RIGHT MENU */
+
+.sidebar-right {
+    grid-column: 3 / 4;
+    border: dashed red 2px;
+    padding-top: 50px;
+}
+
+.sidebar-right .shiny{
+    font-size: 26px;
+    color: #D8F3DC;
+    font-family: "police", sans-serif;
+    text-shadow: 0 0 10px #D8F3DC;
+}
+
+.sidebar-right span{
+    font-size: 34px;
+}
+
+/* FOOTER */
+
+footer {
+    grid-column: 1 / -1;
+}
