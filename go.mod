@@ -9,14 +9,15 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	golang.org/x/crypto v0.9.0
+	golang.org/x/oauth2 v0.8.0
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.1
 )
 
 require (
-	github.com/BurntSushi/toml v1.3.1 // indirect
 	cloud.google.com/go/compute v1.20.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
+	github.com/BurntSushi/toml v1.3.1 // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
@@ -44,7 +45,6 @@ require (
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/oauth2 v0.8.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect

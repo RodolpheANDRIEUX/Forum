@@ -11,7 +11,8 @@ func Serve() {
 	router := gin.Default()
 
 	// parse assets and templates
-	router.Static("/web", "./web")
+	router.Static("/css", "./web/css")
+	router.Static("/script", "./web/script")
 	router.LoadHTMLGlob("web/*.html")
 
 	// init log files

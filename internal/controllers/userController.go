@@ -1,36 +1,46 @@
 package controllers
 
 import (
+	"context"
+	"encoding/json"
+	"errors"
 	"forum/internal/initializer"
 	"forum/internal/models"
 	"forum/internal/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+	"io/ioutil"
 	"net/http"
-	"os"
-	"time"
 )
 
-// todo : reiriger vers username si unername n'existe pas mais le mail oui
-// todo : gmail logic new auth system
+type Body struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
 
 func Signup(c *gin.Context) {
+	var body Body
 	// Get the username/email/password
-	var body struct {
-		Email    string `form:"email"`
-		Password string `form:"password"`
-	}
-	if err := c.Bind(&body); err != nil {
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.HTML(http.StatusInternalServerError, "signup.html", gin.H{"error": err})
 		return
 	}
-	// Hash the password
+
+	err, code := SignupAndStore(c, body)
+
+	if err != nil {
+		c.HTML(code, "signup.html", gin.H{"error": err})
+	}
+
+	// redirect to the configuration of the account
+	c.Redirect(http.StatusFound, "first_connection")
+}
+
+func SignupAndStore(c *gin.Context, body Body) (error, int) {
 	hash, err := utils.HasPassword(body.Password)
 
 	if err != nil {
-		c.HTML(http.StatusInternalServerError, "signup.html", gin.H{"error": "Failed to hash password"})
-		return
+		return errors.New("failed to hash password"), http.StatusInternalServerError
 	}
 
 	// Create the user
@@ -41,14 +51,12 @@ func Signup(c *gin.Context) {
 
 	result := initializer.DB.Create(&user)
 	if result.Error != nil {
-		c.HTML(http.StatusBadRequest, "signup.html", gin.H{"error": "This user already exist"})
-		return
+		return errors.New("this user already exist"), http.StatusBadRequest
 	}
 	//auth the user
-	CreateJWT(c, &user)
+	utils.CreateJWT(c, &user)
 
-	// redirect to the configuration of the account
-	c.Redirect(http.StatusFound, "first_connection")
+	return nil, http.StatusOK
 }
 
 func SendUsername(c *gin.Context) {
@@ -68,59 +76,46 @@ func SendUsername(c *gin.Context) {
 		c.HTML(http.StatusBadRequest, "signup.html", gin.H{"error": "This username already exist"})
 		return
 	}
-	CreateJWT(c, &user)
+	utils.CreateJWT(c, &user)
 	c.Redirect(http.StatusFound, "/user")
 }
 
-func Login(c *gin.Context) {
-	// Get the username/email/password
-	var body struct {
-		Email    string `form:"email"`
-		Password string `form:"password"`
-	}
-	if err := c.Bind(&body); err != nil {
-		c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": err})
-		return
-	}
+func Authorize(c *gin.Context, body Body) (error, int) {
 	// Look up requested user
 	var user models.User
 	initializer.DB.First(&user, "email = ?", body.Email)
 	if user.ID == 0 {
-		c.HTML(http.StatusBadRequest, "login.html", gin.H{"error": "User do not exist"})
-		return
+		return errors.New("user do not exist"), http.StatusBadRequest
 	}
+
 	// Compare sent in password with saved password hash
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 	if err != nil {
-		c.HTML(http.StatusUnauthorized, "login.html", gin.H{"error": "Invalid password"})
-		return
+		return errors.New("invalid password"), http.StatusUnauthorized
 	}
 
 	// set a jwt
-	CreateJWT(c, &user)
+	utils.CreateJWT(c, &user)
 
-	c.Redirect(http.StatusFound, "/user")
+	return nil, http.StatusOK
 }
 
-// CreateJWT : Create a JWT and set it
-func CreateJWT(c *gin.Context, user *models.User) {
-	// Generate a jwt
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":    user.ID,
-		"user":  user.Username,
-		"email": user.Email,
-		"role":  user.Role,
-		"exp":   time.Now().Add(time.Hour * 24 * 10).Unix(),
-	})
-	// Sign and get the complete encoded token as a string using the secret
-	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_JWT")))
-	if err != nil {
-		c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": "Failed to create token"})
+func Login(c *gin.Context) {
+	// Get the username/email/password
+	var body Body
+
+	if err := c.Bind(&body); err != nil {
+		c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": err})
 		return
 	}
-	// send it back
-	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", tokenString, 3600*24*10, "", "", true, true)
+
+	message, errorCode := Authorize(c, body)
+
+	if errorCode != http.StatusOK {
+		c.HTML(errorCode, "login.html", gin.H{"error": message})
+	}
+
+	c.Redirect(http.StatusFound, "/user")
 }
 
 func User(c *gin.Context) {
@@ -138,4 +133,71 @@ func Logout(c *gin.Context) {
 	// Delete the cookie
 	c.SetCookie("Authorization", "", -1, "", "", true, true)
 	c.Redirect(http.StatusFound, "/")
+}
+
+// google auth
+
+func HandleAuth(c *gin.Context) {
+	state := c.Query("state")
+	url := initializer.OauthConfig.AuthCodeURL(initializer.State)
+	queryUrl := utils.AddQuery(url, "state", state)
+	c.Redirect(http.StatusTemporaryRedirect, queryUrl)
+}
+
+func HandleAuthCallback(c *gin.Context) {
+	code := c.Query("code")
+	token, err := initializer.OauthConfig.Exchange(context.Background(), code)
+
+	if err != nil {
+		c.String(http.StatusInternalServerError, "Failed to exchange token")
+		return
+	}
+
+	client := initializer.OauthConfig.Client(context.Background(), token)
+	response, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
+	if err != nil {
+		c.String(http.StatusInternalServerError, "Failed to get user info")
+		return
+	}
+
+	defer response.Body.Close()
+
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "signup.html", gin.H{"error": "Failed to read response body"})
+		return
+	}
+	// Parse user information
+	var body Body
+
+	err = json.Unmarshal(data, &body)
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "signup.html", gin.H{"error": "Failed to parse user info"})
+		return
+	}
+
+	phase := c.Query("state")
+
+	// if login
+	if phase == "login" {
+		message, errorCode := Authorize(c, body)
+
+		if errorCode != http.StatusOK {
+			c.HTML(errorCode, "login.html", gin.H{"error": message})
+			return
+		}
+		// Respond
+		c.HTML(http.StatusOK, "user.html", gin.H{"username": body.Email})
+	} else {
+		// if register
+		dbErr, errorCode := SignupAndStore(c, body)
+
+		if errorCode != http.StatusOK {
+			c.HTML(errorCode, "signup.html", gin.H{"error": dbErr})
+			return
+		}
+		// redirect to the configuration of the account
+		c.Redirect(http.StatusFound, "/first_connection")
+		return
+	}
 }
