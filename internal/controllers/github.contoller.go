@@ -91,7 +91,7 @@ func HandleGithubCallback(c *gin.Context) {
 			return
 		}
 		// Respond
-		c.HTML(http.StatusOK, "user.html", gin.H{"username": body.Email})
+		c.Redirect(http.StatusFound, "/user")
 	} else {
 		// if register
 		dbErr, errorCode := SignupAndStore(c, body)
