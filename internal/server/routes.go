@@ -25,8 +25,12 @@ func Routes(router *gin.Engine) {
 	router.POST("/login", controllers.Login)
 
 	// Google OAuth routes
-	router.GET("/auth/google", controllers.HandleAuth)
-	router.GET("/auth/google/callback", controllers.HandleAuthCallback)
+	router.GET("/auth/google", controllers.HandleGoogleAuth)
+	router.GET("/auth/google/callback", controllers.HandleGoogleCallback)
+
+	// GitHub OAuth routes
+	router.GET("/auth/github", controllers.HandleGitHubLogin)
+	router.GET("/auth/github/callback", controllers.HandleGithubCallback)
 
 	router.GET("/logout", controllers.Logout)
 

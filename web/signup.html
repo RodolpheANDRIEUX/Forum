@@ -19,7 +19,11 @@
     <input type="submit" value="Register">
 </form>
 
-<a href="/auth/google" class="btn btn-danger"><span class="fa fa-google"></span>SignIn with Google</a>
+<div>
+    <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google"></span>SignIn with Google</a>
+    <a href="/auth/github" class="btn btn-danger"><span class="fa fa-google"></span>SignIn with Github</a>
+</div>
+
 
 {{ if .error }}
 <p style="color: red;">{{ .error }}</p>

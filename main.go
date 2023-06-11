@@ -9,7 +9,8 @@ func init() {
 	initializer.LoadEnvVariables()
 	initializer.ConnectToDb()
 	initializer.SyncDatabase()
-	initializer.InitOAuth()
+	initializer.InitGoogleOAuth()
+	initializer.InitGithubOAuth()
 }
 
 func main() {

@@ -7,18 +7,18 @@ import (
 )
 
 var (
-	OauthConfig *oauth2.Config
-	State       string
+	GoogleOauthConfig *oauth2.Config
+	GoogleState       string
 )
 
-func InitOAuth() {
+func InitGoogleOAuth() {
 	// OAuth configuration
-	OauthConfig = &oauth2.Config{
+	GoogleOauthConfig = &oauth2.Config{
 		ClientID:     os.Getenv("OAUTH_CLIENT_ID"),
 		ClientSecret: os.Getenv("OAUTH_SECRET"),
 		Endpoint:     google.Endpoint,
 		RedirectURL:  "http://localhost:3000/auth/google/callback",
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
 	}
-	State = os.Getenv("OAUTH_STATE_SECRET")
+	GoogleState = os.Getenv("OAUTH_STATE_SECRET")
 }
