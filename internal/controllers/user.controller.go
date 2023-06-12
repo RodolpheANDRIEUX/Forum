@@ -48,7 +48,7 @@ func SignupAndStore(c *gin.Context, body Body) (error, int) {
 
 	result := initializer.DB.Create(&user)
 	if result.Error != nil {
-		return errors.New("this user already exist"), http.StatusBadRequest
+		return errors.New("this user already exist"), http.StatusConflict
 	}
 	//auth the user
 	utils.CreateJWT(c, &user)
@@ -56,32 +56,11 @@ func SignupAndStore(c *gin.Context, body Body) (error, int) {
 	return nil, http.StatusOK
 }
 
-func SendUsername(c *gin.Context) {
-	user, err := utils.GetUSer(c)
-
-	if err != nil {
-		c.HTML(http.StatusUnauthorized, "index.html", gin.H{"error": err})
-		Logout(c)
-		return
-	}
-
-	newUsername := c.PostForm("username")
-	user.Username = newUsername
-
-	result := initializer.DB.Save(&user)
-	if result.Error != nil {
-		c.HTML(http.StatusBadRequest, "signup.html", gin.H{"error": "This username already exist"})
-		return
-	}
-	utils.CreateJWT(c, &user)
-	c.Redirect(http.StatusFound, "/user")
-}
-
 func Authorize(c *gin.Context, body Body) (error, int) {
 	// Look up requested user
 	var user models.User
 	initializer.DB.First(&user, "email = ?", body.Email)
-	if user.ID == 0 {
+	if user.UserID == 0 {
 		return errors.New("user do not exist"), http.StatusBadRequest
 	}
 
