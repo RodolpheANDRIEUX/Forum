@@ -1,12 +1,13 @@
-package database
+package initializer
 
 import (
+	"forum/Log"
 	"forum/internal/models"
 )
 
 func SyncDatabase() {
 	err := DB.AutoMigrate(&models.User{})
 	if err != nil {
-		panic("Failed to sync the DB")
+		Log.Err.Panic("Failed to sync the DB")
 	}
 }

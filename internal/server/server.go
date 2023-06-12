@@ -1,29 +1,41 @@
 package server
 
 import (
+	"forum/Log"
+	"forum/internal/initializer"
 	"github.com/gin-gonic/gin"
-	"io"
-	"os"
+	"log"
 )
 
 func Serve() {
 	router := gin.Default()
 
 	// parse assets and templates
-	router.Static("/web", "./web")
+	router.Static("/css", "./web/css")
+	router.Static("/script", "./web/script")
 	router.LoadHTMLGlob("web/*.html")
 
-	// create log file
-	f, _ := os.Create("gin.log")
-	gin.DefaultWriter = io.MultiWriter(f)
+	// init log files
+	logFile := initializer.InitLogs()
+	gin.DefaultWriter = logFile
+	defer func() {
+		if err := logFile.Close(); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	// set default log
+	log.SetOutput(gin.DefaultWriter)
 
 	// routes
 	InitRoutes(router)
 	Routes(router)
 
 	// run
+	log.Println("running the server...")
 	err := router.Run()
 	if err != nil {
+		Log.Err.Println(err)
 		panic(err)
 	}
 }
