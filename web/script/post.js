@@ -1,12 +1,12 @@
-var ws = new WebSocket('ws://localhost:8080/ws');
+const ws = new WebSocket('ws://localhost:3000/ws');
 
 ws.onmessage = function(event) {
-    var messages = document.getElementById('messages');
+    let messages = document.getElementById('messages');
     messages.innerHTML += event.data + '<br>';
 };
 
 document.getElementById('sendButton').onclick = function() {
-    var input = document.getElementById('messageInput');
+    let input = document.getElementById('messageInput');
     ws.send(input.value);
     input.value = '';
 };

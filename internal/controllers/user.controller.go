@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"forum/internal/initializer"
 	"forum/internal/models"
 	"forum/internal/utils"
@@ -46,8 +47,11 @@ func SignupAndStore(c *gin.Context, body Body) (error, int) {
 	// Set a default username
 	user.Username = utils.CreateUniqueUsername(body.Email)
 
-	result := initializer.DB.Create(&user)
+	//result := initializer.DB.Create(&user)
+	result := initializer.DB.Omit("Posts", "Reply").Create(&user)
+
 	if result.Error != nil {
+		fmt.Printf("Error %v \n", result)
 		return errors.New("this user already exist"), http.StatusBadRequest
 	}
 	//auth the user
@@ -81,7 +85,7 @@ func Authorize(c *gin.Context, body Body) (error, int) {
 	// Look up requested user
 	var user models.User
 	initializer.DB.First(&user, "email = ?", body.Email)
-	if user.ID == 0 {
+	if user.UserID == 0 {
 		return errors.New("user do not exist"), http.StatusBadRequest
 	}
 

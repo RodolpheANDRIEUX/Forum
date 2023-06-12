@@ -63,7 +63,7 @@ func GetUSer(c *gin.Context) (models.User, error) {
 
 	initializer.DB.First(&user, claims["id"])
 
-	if user.ID == 0 {
+	if user.UserID == 0 {
 		c.AbortWithStatus(http.StatusUnauthorized)
 		return user, errors.New("401")
 	}
@@ -86,7 +86,7 @@ func CreateUniqueUsername(email string) string {
 func CreateJWT(c *gin.Context, user *models.User) {
 	// Generate a jwt
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":    user.ID,
+		"id":    user.UserID,
 		"user":  user.Username,
 		"email": user.Email,
 		"role":  user.Role,

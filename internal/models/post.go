@@ -1,8 +1,17 @@
 package models
 
-import "gorm.io/gorm"
+import "time"
 
-// @todo :se référer au driagram
 type Post struct {
-	gorm.Model
+	PostID    uint `gorm:"primaryKey;autoIncrement"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	UserID    uint
+	Message   string
+	Picture   string
+	Topic     string
+
+	User      User       `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Replies   []Reply    `gorm:"foreignKey:PostID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	PostLikes []PostLike `gorm:"foreignKey:PostID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
