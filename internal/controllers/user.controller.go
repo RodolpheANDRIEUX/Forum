@@ -50,7 +50,7 @@ func SignupAndStore(c *gin.Context, body Body) (error, int) {
 	result := initializer.DB.Omit("Posts", "Reply").Create(&user)
 
 	if result.Error != nil {
-		return errors.New("this user already exist"), http.StatusBadRequest
+		return errors.New("this user already exist"), http.StatusConflict
 	}
 	//auth the user
 	utils.CreateJWT(c, &user)
