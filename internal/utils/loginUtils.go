@@ -86,11 +86,11 @@ func CreateUniqueUsername(email string) string {
 func CreateJWT(c *gin.Context, user *models.User) {
 	// Generate a jwt
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":    user.UserID,
-		"user":  user.Username,
-		"email": user.Email,
-		"role":  user.Role,
-		"exp":   time.Now().Add(time.Hour * 24 * 10).Unix(),
+		"userid": user.UserID,
+		"user":   user.Username,
+		"email":  user.Email,
+		"role":   user.Role,
+		"exp":    time.Now().Add(time.Hour * 24 * 10).Unix(),
 	})
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_JWT")))
