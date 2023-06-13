@@ -1,13 +1,12 @@
 package controllers
 
 import (
-	"fmt"
 	"forum/internal/initializer"
 	"forum/internal/models"
 	"forum/internal/utils"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"net/http"
-	"path/filepath"
 )
 
 func SendUsername(c *gin.Context) {
@@ -44,6 +43,27 @@ func UploadProfileImg(c *gin.Context) {
 		return
 	}
 
+	// Open the file
+	fileData, err := file.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": err.Error(),
+		})
+		return
+	}
+	defer fileData.Close()
+
+	// Read the file data into a byte slice
+	fileBytes, err := ioutil.ReadAll(fileData)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": err.Error(),
+		})
+		return
+	}
+
 	// get the user
 	user, err := utils.GetUSer(c)
 
@@ -55,25 +75,16 @@ func UploadProfileImg(c *gin.Context) {
 		return
 	}
 
-	// save the profile image path to db
-	path := filepath.Join("/uploads", file.Filename)
-	user.ProfileImg = path
+	// Assign the file data to the user's profile image field
+	user.ProfileImg = fileBytes
 
+	// save the user
 	result := initializer.DB.Save(&user)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
 			"message": err,
 		})
-		return
-	}
-
-	// save the file locally
-	err = c.SaveUploadedFile(file, filepath.Join("./assets/uploads", file.Filename))
-
-	if err != nil {
-		fmt.Println("err= ", err)
-		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 
