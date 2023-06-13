@@ -16,20 +16,31 @@ async function displayProfile() {
 
         const data = await response.json();
 
-        console.log(data);
-
         const div = document.createElement('div')
-        div.innerHTML = `
+
+        if (data.data.ProfileImg !== null){
+            div.innerHTML = `
             <div class='profile_image'>
-                <img src='${data.data.ProfileImg}' alt='${data.data.Username}_profile_img'>
+                <img src='data:image/jpeg;base64,${data.data.ProfileImg}' alt='${data.data.Username}_profile_img'>
             </div>
-            <div class='profile_info'>
+            `;
+        } else {
+            div.innerHTML = `
+            <div class='profile_image'>
+                <img src='/uploads/default_profile_image.jpeg' alt='${data.data.Username}_profile_img'>
+            </div>
+            `;
+        }
+
+        const profileInfo = document.createElement('div')
+        profileInfo.classList.add('profile_info')
+        profileInfo.innerHTML = `
                 <p><b>Username: </b>${data.data.Username}</p>
                 <p><b>Email: </b>${data.data.Email}</p>
                 <p><b>Role: </b>${data.data.Role}</p>
-            </div>
-    `;
+                `;
         document.body.appendChild(div);
+        div.appendChild(profileInfo)
     } catch (error) {
         console.error(error);
     }

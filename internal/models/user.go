@@ -11,7 +11,7 @@ type User struct {
 	Role       string
 	Username   string `gorm:"unique"`
 	Email      string `gorm:"unique"`
-	ProfileImg string `gorm:"default:'/uploads/default_profile_image.jpeg'"`
+	ProfileImg []byte
 	Password   string
 
 	//Posts []Post `gorm:"foreignKey:UserID"`
