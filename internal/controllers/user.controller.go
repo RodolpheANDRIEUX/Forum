@@ -82,7 +82,7 @@ func Login(c *gin.Context) {
 	// Get the username/email/password
 	var body Body
 
-	if err := c.Bind(&body); err != nil {
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": err})
 		return
 	}

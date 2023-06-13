@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Login Form</h2>
-<form action="" method="POST">
+<form action="" method="POST" id="login_form">
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" required><br><br>
 
@@ -23,5 +23,7 @@
 {{ if .error }}
 <p style="color: red;">{{ .error }}</p>
 {{ end }}
+
+<script src="script/login.js"></script>
 </body>
 </html>
