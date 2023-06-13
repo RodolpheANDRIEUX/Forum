@@ -19,10 +19,12 @@ func Routes(router *gin.Engine) {
 	router.POST("/signup", controllers.Signup)
 
 	router.GET("/first_connection", func(c *gin.Context) { c.HTML(http.StatusOK, "newUser.html", nil) })
-	router.POST("/first_connection", controllers.SendUsername)
+	router.POST("/first_connection", controllers.SendUsername, controllers.UploadProfileImg)
 
 	router.GET("/login", func(c *gin.Context) { c.HTML(http.StatusOK, "login.html", nil) })
 	router.POST("/login", controllers.Login)
+
+	router.GET("/getUser", controllers.SendProfileData)
 
 	// Google OAuth routes
 	router.GET("/auth/google", controllers.HandleGoogleAuth)
@@ -35,4 +37,6 @@ func Routes(router *gin.Engine) {
 	router.GET("/logout", controllers.Logout)
 
 	router.GET("/user", middleware.RequireAuth, controllers.User)
+
+	router.GET("/validate", middleware.RequireAuth)
 }
