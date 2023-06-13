@@ -1,7 +1,9 @@
 package server
 
 import (
+	"fmt"
 	"forum/Log"
+	"forum/internal/controllers"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -46,16 +48,23 @@ func WebsocketHandler(c *gin.Context) {
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
-			Log.Err.Println("Failed to read message:", err)
+			fmt.Println("Failed to read message:", err)
 			break
 		}
-
-		// affiche le message sur toutes les connexions active
+		//@todo :  gérer l'erreur si l'utlisateur est pas connecté
+		// save post in db
+		if err := controllers.AddPostInDB(string(msg), c); err != nil {
+			//c.HTML(http.StatusUnauthorized, "home.html", gin.H{"error": "Can't post without account. Please sign in."})
+			//Log.Err.println("User not connected")
+			//log.println("User not connected")
+			break
+		}
+		// display message
 		Mutex.Lock()
 		for conn := range Connections {
 			err = conn.WriteMessage(websocket.TextMessage, msg)
 			if err != nil {
-				Log.Err.Println("Failed to write message:", err)
+				fmt.Println("Failed to write message:", err)
 				delete(Connections, conn)
 			}
 		}
