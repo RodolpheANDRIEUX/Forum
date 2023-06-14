@@ -19,21 +19,38 @@ func SendUsername(c *gin.Context) {
 	}
 
 	newUsername := c.PostForm("username")
-	user.Username = newUsername
 
-	result := initializer.DB.Save(&user)
-	if result.Error != nil {
-		c.HTML(http.StatusBadRequest, "signup.html", gin.H{"error": "This username already exist"})
-		return
+	if newUsername != "" {
+		user.Username = newUsername
+
+		result := initializer.DB.Save(&user)
+		if result.Error != nil {
+			c.Set("message", "Username is already taken")
+			c.Set("status", 409)
+			c.Next()
+		}
+		utils.CreateJWT(c, &user)
 	}
-	utils.CreateJWT(c, &user)
+	c.Set("message", "Username updated successfully")
+	c.Set("status", 200)
 	c.Next()
 	//c.Redirect(http.StatusFound, "/user")
 }
 
 func UploadProfileImg(c *gin.Context) {
+	// get the last message (if exist)
+	message := c.GetString("message")
+	status := c.GetInt("status")
+
 	// get the file
 	file, err := c.FormFile("profile-img")
+
+	if file == nil {
+		c.JSON(status, gin.H{
+			"message": message,
+		})
+		return
+	}
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -91,7 +108,7 @@ func UploadProfileImg(c *gin.Context) {
 	// Render the page
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": "Profile updated successfully",
+		"message": message + " Profile updated successfully",
 	})
 }
 
@@ -109,5 +126,4 @@ func SendProfileData(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data": user,
 	})
-
 }
