@@ -5,12 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Forum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" type="text/css" href="./style/page.css">
+  <link rel="stylesheet" type="text/css" href="./style/post.css">
 </head>
 
 <body>
 
-<header>
+<header id="page-header">
   <img id="header-logo" src="img/HeaderLogo.png" alt="Forum">
   <div id="header-border"></div>
 </header>
@@ -31,8 +33,54 @@
 
   <section class="main-content">
     <div id="background"></div>
-    <!-- add posts here -->
+
+    <dialog id="post-menu">
+      <ul>
+        <li><a href="#">Author</a></li>
+        <li><a href="#">Report</a></li>
+      </ul>
+    </dialog>
+
+
+    <div id="feed">
+
+      <section id="new-post">
+        <form action="/post">
+
+        </form>
+      </section>
+
+      <section id="filters">
+      </section>
+
+      <!--    <template id="post-template">-->
+      <article class="post">
+        <header>
+          <img src="./img/RivenGPT.jpg" alt="profile pic" class="profile-pic">
+          <span class="post-author">Tilted Riven</span>
+          <span class="open-dialog">...</span>
+        </header>
+        <p class="post-body">post content</p>
+        <footer>
+          <div class="post-reactions">
+            <i class="fa-regular fa-heart fa-shake fa-2xl"></i>
+            <i class="fa-regular fa-comment fa-2xl"></i>
+            <i class="fa-solid fa-share-nodes fa-2xl"></i>
+          </div>
+          <div class="reactions-numbers">
+            <span class="likes">1.2k</span>
+            <span class="comments">36</span>
+          </div>
+        </footer>
+      </article>
+      <!--    </template>-->
+
+      <!-- add posts ici -->
+    </div>
+
+
   </section>
+
 
   <aside class="sidebar-right">
       <h2 class="shiny"><span>S</span>uggestions for you</h2>
@@ -44,9 +92,9 @@
 
 </main>
 
-<footer>
-  <p>© 2023 Forum</p>
-</footer>
+<!--<footer>-->
+<!--  <p>© 2023 Forum</p>-->
+<!--</footer>-->
 
 <script src="./script/page.js"></script>
 </body>
