@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"errors"
-	"fmt"
 	"forum/internal/initializer"
 	"forum/internal/models"
 	"forum/internal/utils"
@@ -51,34 +50,12 @@ func SignupAndStore(c *gin.Context, body Body) (error, int) {
 	result := initializer.DB.Omit("Posts", "Reply").Create(&user)
 
 	if result.Error != nil {
-		fmt.Printf("Error %v \n", result)
-		return errors.New("this user already exist"), http.StatusBadRequest
+		return errors.New("this user already exist"), http.StatusConflict
 	}
 	//auth the user
 	utils.CreateJWT(c, &user)
 
 	return nil, http.StatusOK
-}
-
-func SendUsername(c *gin.Context) {
-	user, err := utils.GetUSer(c)
-
-	if err != nil {
-		c.HTML(http.StatusUnauthorized, "index.html", gin.H{"error": err})
-		Logout(c)
-		return
-	}
-
-	newUsername := c.PostForm("username")
-	user.Username = newUsername
-
-	result := initializer.DB.Save(&user)
-	if result.Error != nil {
-		c.HTML(http.StatusBadRequest, "signup.html", gin.H{"error": "This username already exist"})
-		return
-	}
-	utils.CreateJWT(c, &user)
-	c.Redirect(http.StatusFound, "/user")
 }
 
 func Authorize(c *gin.Context, body Body) (error, int) {
@@ -105,7 +82,7 @@ func Login(c *gin.Context) {
 	// Get the username/email/password
 	var body Body
 
-	if err := c.Bind(&body); err != nil {
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": err})
 		return
 	}

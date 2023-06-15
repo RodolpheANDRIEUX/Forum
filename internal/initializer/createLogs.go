@@ -7,7 +7,9 @@ import (
 	"os"
 )
 
-func InitLogs() *lumberjack.Logger {
+var LogFile *lumberjack.Logger
+
+func InitLogs() {
 
 	logsDir := "./logs"
 	// Create logs directory if it does not exist
@@ -18,7 +20,7 @@ func InitLogs() *lumberjack.Logger {
 		}
 	}
 
-	logFile := &lumberjack.Logger{
+	LogFile = &lumberjack.Logger{
 		Filename:   logsDir + "/gin.log",
 		MaxSize:    500,
 		MaxBackups: 3,
@@ -26,11 +28,10 @@ func InitLogs() *lumberjack.Logger {
 		Compress:   false,
 	}
 
-	if err := logFile.Rotate(); err != nil {
+	if err := LogFile.Rotate(); err != nil {
 		Log.Err.Fatal(err)
 	}
 
-	Log.InitErrorLog(logFile)
-
-	return logFile
+	Log.InitErrorLog(LogFile)
+	log.SetOutput(LogFile)
 }

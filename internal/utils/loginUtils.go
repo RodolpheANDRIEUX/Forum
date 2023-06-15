@@ -61,7 +61,7 @@ func GetUSer(c *gin.Context) (models.User, error) {
 		return user, err
 	}
 
-	initializer.DB.First(&user, claims["id"])
+	initializer.DB.First(&user, claims["userid"])
 
 	if user.UserID == 0 {
 		c.AbortWithStatus(http.StatusUnauthorized)
