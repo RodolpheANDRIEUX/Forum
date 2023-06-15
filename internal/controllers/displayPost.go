@@ -22,14 +22,17 @@ func getPost() ([]models.PostWeb, error) {
 			return nil, err
 		}
 
+		var likeNumber int
+
 		postWeb := models.PostWeb{
-			PostID:        post.PostID,
-			UserID:        post.UserID,
-			Username:      user.Username,
-			ProfilPicture: user.ProfilImg,
-			Message:       post.Message,
-			Picture:       post.Picture,
-			Topic:         post.Topic,
+			PostID:         post.PostID,
+			UserID:         post.UserID,
+			Username:       user.Username,
+			ProfilePicture: user.ProfileImg,
+			Message:        post.Message,
+			Picture:        post.Picture,
+			Topic:          post.Topic,
+			Like:           likeNumber,
 		}
 		postsWeb = append(postsWeb, postWeb)
 	}
