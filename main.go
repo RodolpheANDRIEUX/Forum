@@ -6,6 +6,7 @@ import (
 )
 
 func init() {
+	initializer.InitLogs()
 	initializer.LoadEnvVariables()
 	initializer.ConnectToDb()
 	initializer.SyncDatabase()
