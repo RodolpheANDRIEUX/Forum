@@ -6,6 +6,7 @@ import (
 	"forum/internal/utils"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 )
 
@@ -30,8 +31,8 @@ func SendUsername(c *gin.Context) {
 			c.Next()
 		}
 		utils.CreateJWT(c, &user)
+		c.Set("message", "Username updated successfully")
 	}
-	c.Set("message", "Username updated successfully")
 	c.Set("status", 200)
 	c.Next()
 	//c.Redirect(http.StatusFound, "/user")
@@ -60,19 +61,9 @@ func UploadProfileImg(c *gin.Context) {
 		return
 	}
 
-	// Open the file
-	fileData, err := file.Open()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"message": err.Error(),
-		})
-		return
-	}
-	defer fileData.Close()
+	// convert the file to blob image
+	fileBytes, err := fileToBlob(file)
 
-	// Read the file data into a byte slice
-	fileBytes, err := ioutil.ReadAll(fileData)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -81,26 +72,13 @@ func UploadProfileImg(c *gin.Context) {
 		return
 	}
 
-	// get the user
-	user, err := utils.GetUSer(c)
+	// save profile picture
+	code, err := saveProfilePicture(c, fileBytes)
 
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{
+		c.JSON(code, gin.H{
 			"success": false,
-			"message": err,
-		})
-		return
-	}
-
-	// Assign the file data to the user's profile image field
-	user.ProfileImg = fileBytes
-
-	// save the user
-	result := initializer.DB.Save(&user)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"message": err,
+			"message": message + err.Error(),
 		})
 		return
 	}
@@ -126,4 +104,38 @@ func SendProfileData(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data": user,
 	})
+}
+
+func saveProfilePicture(c *gin.Context, file []byte) (int, error) {
+	user, err := utils.GetUSer(c)
+	if err != nil {
+		return http.StatusUnauthorized, err
+	}
+
+	// Assign the file data to the user's profile image field
+	user.ProfileImg = file
+
+	// save the user
+	result := initializer.DB.Save(&user)
+	if result.Error != nil {
+		return http.StatusInternalServerError, err
+	}
+	return 200, nil
+}
+
+func fileToBlob(file *multipart.FileHeader) ([]byte, error) {
+	// Open the file
+	fileData, err := file.Open()
+	if err != nil {
+		return nil, err
+	}
+	defer fileData.Close()
+
+	// Read the file data into a byte slice
+	fileBytes, err := ioutil.ReadAll(fileData)
+	if err != nil {
+		return nil, err
+	}
+
+	return fileBytes, nil
 }

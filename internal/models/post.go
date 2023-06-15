@@ -8,7 +8,7 @@ type Post struct {
 	UpdatedAt time.Time
 	UserID    uint
 	Message   string
-	Picture   string
+	Picture   []byte
 	Topic     string
 
 	User User `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
