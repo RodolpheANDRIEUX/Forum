@@ -20,17 +20,12 @@ func Serve() {
 	router.LoadHTMLGlob("web/*.html")
 	router.MaxMultipartMemory = 20 << 20 // 20 MiB
 
-	// init log files
-	logFile := initializer.InitLogs()
-	gin.DefaultWriter = logFile
+	gin.DefaultWriter = initializer.LogFile
 	defer func() {
-		if err := logFile.Close(); err != nil {
+		if err := initializer.LogFile.Close(); err != nil {
 			log.Fatal(err)
 		}
 	}()
-
-	// set default log
-	log.SetOutput(gin.DefaultWriter)
 
 	// routes
 	InitRoutes(router)

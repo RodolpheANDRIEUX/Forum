@@ -4,6 +4,7 @@ import (
 	"forum/Log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
 	"os"
 )
 
@@ -18,4 +19,7 @@ func ConnectToDb() {
 	if err != nil {
 		Log.Err.Panic("Failed to connect to DB")
 	}
+
+	log.Println("connected to ", DB)
+
 }

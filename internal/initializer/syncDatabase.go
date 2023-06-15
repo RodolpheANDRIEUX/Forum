@@ -1,48 +1,43 @@
 package initializer
 
 import (
-	"fmt"
 	"forum/Log"
 	"forum/internal/models"
+	"log"
 )
 
 func SyncDatabase() {
-	fmt.Println("1")
+	log.Println("Syncing User model with database")
 	err := DB.AutoMigrate(&models.User{})
 	if err != nil {
-		fmt.Printf("Failed to sync the DB: %v\n", err)
-
+		Log.Err.Println("Failed to sync the User table:", err)
 	}
 
 	DB.Raw("")
-	fmt.Println("2")
 
+	log.Println("Syncing Post model with database")
 	err = DB.AutoMigrate(&models.Post{})
 	if err != nil {
-		fmt.Printf("Failed to sync the DB: %v\n", err)
-		Log.Err.Printf("Failed to sync the Post table: %v", err)
+		Log.Err.Println("Failed to sync the Post table:", err)
 	}
-	fmt.Println("3")
 
+	log.Println("Syncing Reply model with database")
 	err = DB.AutoMigrate(&models.Reply{})
 	if err != nil {
-		fmt.Printf("Failed to sync the DB: %v\n", err)
-		Log.Err.Printf("Failed to sync the Reply table: %v", err)
+		Log.Err.Println("Failed to sync the Reply table:", err)
 	}
-	fmt.Println("4")
 
+	log.Println("Syncing PostLike model with database")
 	err = DB.AutoMigrate(&models.PostLike{})
 	if err != nil {
-		fmt.Printf("Failed to sync the DB: %v\n", err)
-		Log.Err.Printf("Failed to sync the Like table: %v", err)
+		Log.Err.Println("Failed to sync the PostLike table:", err)
 	}
-	fmt.Println("5")
 
+	log.Println("Syncing ReplyLike model with database")
 	err = DB.AutoMigrate(&models.ReplyLike{})
 	if err != nil {
-		fmt.Printf("Failed to sync the DB: %v\n", err)
-		Log.Err.Printf("Failed to sync the Like table: %v", err)
+		Log.Err.Println("Failed to sync the ReplyLike table:", err)
 	}
-	fmt.Println("6")
 
+	log.Println("Database sync complete")
 }
