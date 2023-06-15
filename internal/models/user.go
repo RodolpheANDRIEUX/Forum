@@ -9,5 +9,6 @@ type User struct {
 	Role      string
 	Username  string `gorm:"unique;not null"`
 	Email     string `gorm:"unique;not null"`
-	Password  string
+
+	Password string
 }

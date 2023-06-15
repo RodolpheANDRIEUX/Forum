@@ -51,12 +51,11 @@ func WebsocketHandler(c *gin.Context) {
 			fmt.Println("Failed to read message:", err)
 			break
 		}
-		//@todo :  gérer l'erreur si l'utlisateur est pas connecté
+		//@todo:  gérer l'erreur si l'utlisateur est pas connecté
 		// save post in db
-		if err := controllers.AddPostInDB(string(msg), c); err != nil {
-			//c.HTML(http.StatusUnauthorized, "home.html", gin.H{"error": "Can't post without account. Please sign in."})
-			//Log.Err.println("User not connected")
-			//log.println("User not connected")
+		if err, code := controllers.AddPostInDB(string(msg), c); err != nil {
+			c.HTML(code, "home.html", gin.H{"error": "Can't post without account. Please sign in."})
+			Log.Err.Printf("User not connected, can't save post")
 			break
 		}
 		// display message
