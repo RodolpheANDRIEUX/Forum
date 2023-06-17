@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func AddPostInDB(content string, c *gin.Context) (error, int) {
+func AddPostInDB(post *models.Post, c *gin.Context) (error, int) {
 	user, err := utils.GetUSer(c)
 
 	if err != nil {
@@ -17,12 +17,11 @@ func AddPostInDB(content string, c *gin.Context) (error, int) {
 		return err, http.StatusUnauthorized
 	}
 
-	newPost := models.Post{UserID: user.UserID, Message: content}
+	post.UserID = user.UserID
 
-	result := initializer.DB.Create(&newPost)
+	result := initializer.DB.Create(&post)
 
 	if result.Error != nil {
-		//@todo: voir quelle code erreur mettre
 		Log.Err.Printf("Error while saving the post %v", result)
 		return err, http.StatusInternalServerError
 	}
