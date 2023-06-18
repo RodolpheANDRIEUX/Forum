@@ -16,18 +16,21 @@ async function displayProfile() {
 
         const data = await response.json();
 
-        const div = document.createElement('div')
+        const userSection = document.getElementById('user_section');
+        const div = document.createElement('div');
 
         if (data.data.ProfileImg !== null){
             div.innerHTML = `
             <div class='profile_image'>
                 <img src='data:image/jpeg;base64,${data.data.ProfileImg}' alt='${data.data.Username}_profile_img'>
+                <p class='username'>${data.data.Username}</p>
             </div>
             `;
         } else {
             div.innerHTML = `
             <div class='profile_image'>
-                <img src='/uploads/default_profile_image.jpeg' alt='${data.data.Username}_profile_img'>
+                <img src='/img/default_profile_image.jpeg' alt='${data.data.Username}_profile_img'>
+                <p class='username'>${data.data.Username}</p>
             </div>
             `;
         }
@@ -35,11 +38,11 @@ async function displayProfile() {
         const profileInfo = document.createElement('div')
         profileInfo.classList.add('profile_info')
         profileInfo.innerHTML = `
-                <p><b>Username: </b>${data.data.Username}</p>
-                <p><b>Email: </b>${data.data.Email}</p>
-                <p><b>Role: </b>${data.data.Role}</p>
+                <p><b>Username:</b><br>${data.data.Username}</p>
+                <p><b>Email:</b><br>${data.data.Email}</p>
+                <p><b>Role:</b><br>${data.data.Role}</p>
                 `;
-        document.body.appendChild(div);
+        userSection.appendChild(div);
         div.appendChild(profileInfo)
     } catch (error) {
         console.error(error);
@@ -68,7 +71,7 @@ form.addEventListener('submit', async (event) => {
 
         const messageElement = document.createElement('p');
         messageElement.textContent = data.message;
-        document.body.appendChild(messageElement);
+        profileModal.appendChild(messageElement);
 
         setTimeout(() => {
             messageElement.style.transition = 'opacity 0.5s';
@@ -83,3 +86,30 @@ form.addEventListener('submit', async (event) => {
         console.error(error);
     }
 });
+
+
+const profileModal = document.getElementById('profile_modal')
+const btnModal = document.getElementById('open_edit')
+const overlay = document.getElementById('modal_overlay')
+const close = document.getElementById('close')
+
+
+btnModal.addEventListener('click', e => {
+    profileModal.classList.add('open')
+    overlay.classList.add('open')
+})
+
+
+overlay.addEventListener('click', e => {
+    profileModal.classList.remove('open')
+    overlay.classList.remove('open')
+})
+
+function showPreview(event){
+    if(event.target.files.length > 0){
+        const src = URL.createObjectURL(event.target.files[0]);
+        const preview = document.getElementById("img-preview");
+        preview.src = src;
+        preview.style.display = "block";
+    }
+}

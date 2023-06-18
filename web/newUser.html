@@ -3,15 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="css/newUser.css" />
+    <link rel="stylesheet" href="css/newUser.css"/>
 </head>
 <body>
-<form action="/first_connection" method="POST" enctype="multipart/form-data" id="submit_modifications">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username">
-    <input type="file" name="profile-img">
-    <input type="submit" value="Finish the inscription">
-</form>
+<div id="modal_overlay"></div>
+<div class="container_large">
+
+    <div id="profile_modal" class="profile_modal">
+        <form action="/first_connection" method="POST" enctype="multipart/form-data" id="submit_modifications">
+            <label for="username">Username:</label>
+            <input class="profile_input" type="text" id="username" name="username">
+            <label for="username">Profile Image:</label>
+            <input class="profile_input" type="file" name="profile-img" accept="image/*" onchange="showPreview(event);">
+
+            <div class="preview">
+                <img id="img-preview">
+            </div>
+
+            <input type="submit" value="Finish the inscription">
+        </form>
+    </div>
+
+    <div class="content_container">
+        <section class="notifications">
+            <h4 class="section_header">Notifications:</h4>
+
+        </section>
+
+        <section class="post_section">
+            <h4 class="section_header">Posts:</h4>
+
+        </section>
+    </div>
+    <section class="user_section">
+        <h4 class="section_header">Your profile:</h4>
+        <div id="user_section"></div>
+
+        <button id="open_edit">Edit profile</button>
+    </section>
+</div>
 
 <script src="script/firstConnection.js"></script>
 
