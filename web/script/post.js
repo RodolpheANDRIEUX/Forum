@@ -3,11 +3,29 @@ const ws = new WebSocket('ws://localhost:3000/ws');
 ws.onmessage = function(event) {
     const messages = document.getElementById('messages');
     const data = JSON.parse(event.data);
-    let messageHtml = data.Message;
+
+    const messageDiv = document.createElement('div')
+    messageDiv.className = "message_div"
+
+    messageDiv.innerHTML =
+        `<div class="post_profile">
+            <img src='data:image/jpeg;base64,${data.User.ProfileImg}' alt='${data.User.Username}_profile_img'>
+            <p>${data.User.Username}</p>
+            <p>${data.User.Role}</p>
+        </div>`
+
+    const postContent = document.createElement('div')
+    postContent.className = "post_content"
+    postContent.textContent = data.Message
+    messageDiv.appendChild(postContent)
+
     if (data.Picture) {
-        messageHtml += '<br><img src="data:image/jpeg;base64,' + data.Picture + '">';
+        postContent.innerHTML = `
+<p>${data.Message}</p>
+<img src='data:image/jpeg;base64,${data.Picture}' alt='${data.PostID}_post_img'>
+`
     }
-    messages.innerHTML += messageHtml + '<br>';
+    messages.appendChild(messageDiv)
 };
 
 document.getElementById('sendButton').onclick = function() {

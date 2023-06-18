@@ -17,6 +17,7 @@ func AddPostInDB(post *models.Post, c *gin.Context) (error, int) {
 		return err, http.StatusUnauthorized
 	}
 
+	post.User = user
 	post.UserID = user.UserID
 
 	result := initializer.DB.Create(&post)

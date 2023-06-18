@@ -16,19 +16,19 @@ func getPost() ([]models.PostWeb, error) {
 
 	var postsWeb []models.PostWeb
 	for _, post := range posts {
-		var user models.User
-		err := initializer.DB.Model(&models.User{}).Where("user_id = ?", post.UserID).First(&user).Error
-		if err != nil {
-			return nil, err
-		}
+		/*		var user models.User
+				err := initializer.DB.Model(&models.User{}).Where("user_id = ?", post.UserID).First(&user).Error
+				if err != nil {
+					return nil, err
+				}*/
 
 		var likeNumber int
 
 		postWeb := models.PostWeb{
 			PostID:         post.PostID,
-			UserID:         post.UserID,
-			Username:       user.Username,
-			ProfilePicture: user.ProfileImg,
+			UserID:         post.User.UserID,
+			Username:       post.User.Username,
+			ProfilePicture: post.User.ProfileImg,
 			Message:        post.Message,
 			Picture:        post.Picture,
 			Topic:          post.Topic,

@@ -6,7 +6,8 @@ type Post struct {
 	PostID    uint `gorm:"primaryKey;autoIncrement"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	UserID    uint
+	UserID    uint `gorm:"not null"`
+	User      User
 	Message   string
 	Picture   []byte
 	Topic     string
