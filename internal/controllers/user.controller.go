@@ -104,7 +104,9 @@ func User(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "user.html", gin.H{"user": user})
+	var posts []models.Post
+	initializer.DB.Where("user_id = ?", user.UserID).Find(&posts)
+	c.HTML(http.StatusOK, "user.html", gin.H{"posts": posts})
 }
 
 func Logout(c *gin.Context) {

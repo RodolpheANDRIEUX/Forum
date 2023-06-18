@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"encoding/base64"
+	"time"
+)
 
 type Post struct {
 	PostID    uint `gorm:"primaryKey;autoIncrement"`
@@ -11,6 +14,14 @@ type Post struct {
 	Message   string
 	Picture   []byte
 	Topic     string
+}
+
+func (p Post) FormattedCreatedAt() string {
+	return p.CreatedAt.Format("02-01-2006 15:04")
+}
+
+func (p Post) EncodedImage() string {
+	return base64.StdEncoding.EncodeToString(p.Picture)
 }
 
 type PostWeb struct {

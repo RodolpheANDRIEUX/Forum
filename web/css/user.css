@@ -120,3 +120,19 @@ body{
     max-width: 80px;
     border-radius: 100%;
 }
+
+.image_post{
+    width: 40%;
+}
+
+.post{
+    border: 1px solid black;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #ADE5C8FF;
+    border-radius: 5px;
+}
+
+.post p{
+    margin: 0 0 5px;
+}

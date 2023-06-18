@@ -43,6 +43,7 @@ func ParseUser(c *gin.Context) (models.User, error) {
 	user.Username = claims["user"].(string)
 	user.Email = claims["email"].(string)
 	user.Role = claims["role"].(string)
+	user.UserID = uint(claims["userid"].(float64))
 
 	return user, nil
 }

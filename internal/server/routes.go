@@ -18,8 +18,8 @@ func Routes(router *gin.Engine) {
 	router.GET("/signup", func(c *gin.Context) { c.HTML(http.StatusOK, "signup.html", nil) })
 	router.POST("/signup", controllers.Signup)
 
-	router.GET("/first_connection", func(c *gin.Context) { c.HTML(http.StatusOK, "newUser.html", nil) })
-	router.POST("/first_connection", controllers.SendUsername, controllers.UploadProfileImg)
+	router.GET("/user", middleware.RequireAuth, controllers.User)
+	router.POST("/user", controllers.SendUsername, controllers.UploadProfileImg)
 
 	router.GET("/login", func(c *gin.Context) { c.HTML(http.StatusOK, "login.html", nil) })
 	router.POST("/login", controllers.Login)
@@ -38,7 +38,7 @@ func Routes(router *gin.Engine) {
 
 	router.GET("/tenpost", controllers.DisplayPost)
 
-	router.GET("/user", middleware.RequireAuth, controllers.User)
+	//router.GET("/user", middleware.RequireAuth, controllers.User)
 
 	router.GET("/validate", middleware.RequireAuth)
 }
