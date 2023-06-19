@@ -54,10 +54,13 @@ const form = document.getElementById('submit_modifications');
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
+    const submitButton = document.getElementById('submit_changes')
     const formData = new FormData(form);
 
     try {
-        const response = await fetch('/first_connection', {
+        submitButton.disabled = true;
+
+        const response = await fetch('/user', {
             method: 'POST',
             body: formData,
         });

@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"fmt"
+	"forum/internal/controllers"
 	"forum/internal/initializer"
 	"forum/internal/models"
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,8 @@ func RequireAuth(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
 
 	if err != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		controllers.Logout(c)
+		c.Redirect(http.StatusUnauthorized, "/")
 	}
 
 	// Decode/Validate it
@@ -29,7 +31,8 @@ func RequireAuth(c *gin.Context) {
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
-			c.AbortWithStatus(http.StatusUnauthorized)
+			controllers.Logout(c)
+			c.Redirect(http.StatusUnauthorized, "/")
 		}
 
 		// Find the user with token sub id
@@ -37,7 +40,8 @@ func RequireAuth(c *gin.Context) {
 		initializer.DB.First(&user, claims["userid"])
 
 		if user.UserID == 0 {
-			c.AbortWithStatus(http.StatusUnauthorized)
+			controllers.Logout(c)
+			c.Redirect(http.StatusUnauthorized, "/")
 		}
 		// Attach to req
 		c.Set("user", user)
@@ -46,7 +50,8 @@ func RequireAuth(c *gin.Context) {
 		c.Next()
 
 	} else {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		controllers.Logout(c)
+		c.Redirect(http.StatusUnauthorized, "/")
 	}
 }
 

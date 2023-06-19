@@ -14,13 +14,13 @@
             <label for="username">Username:</label>
             <input class="profile_input" type="text" id="username" name="username">
             <label for="username">Profile Image:</label>
-            <input class="profile_input" type="file" name="profile-img" accept=".jpg,.jpeg,.png,.gif"> onchange="showPreview(event);">
+            <input class="profile_input" type="file" name="profile-img" accept=".jpg,.jpeg,.png,.gif" onchange="showPreview(event)">
 
-            <div class="preview">
+            <div class="profile_image">
                 <img id="img-preview">
             </div>
 
-            <input type="submit" value="Finish the inscription">
+            <input id="submit_changes" type="submit" value="Update the profile">
         </form>
     </div>
 
