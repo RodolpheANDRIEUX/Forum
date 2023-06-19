@@ -26,6 +26,9 @@ func Routes(router *gin.Engine) {
 
 	router.GET("/getUser", controllers.SendProfileData)
 
+	// admin
+	router.GET("/admin", middleware.RequireAdmin, controllers.Admin)
+
 	// Google OAuth routes
 	router.GET("/auth/google", controllers.HandleGoogleAuth)
 	router.GET("/auth/google/callback", controllers.HandleGoogleCallback)

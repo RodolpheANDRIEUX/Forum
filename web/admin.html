@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<h2>Welcome {{ .admin.Username }}</h2>
+<p>Let's kick some posts.</p>
+<div class="all_users">
+    <h3 class="section_header">All users</h3>
+    <p>Click on user's name to see more.</p>
+    {{ range .allUsers }}
+    <button class="accordion">{{ .Username }}</button>
+    <div class="panel">
+        <p>Username: {{ .Username }}</p>
+        <p>Email: {{ .Email }}</p>
+        <p>Role: {{ .Role }}</p>
+        <p>Registered the: {{ .FormattedDate }}</p>
+        <button class="edit" id="">Edit</button>
+    </div>
+    {{ end }}
+</div>
+
+<script src="script/admin.js"></script>
+</body>
+</html>

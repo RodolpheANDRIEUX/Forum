@@ -115,3 +115,12 @@ func AddQuery(link string, queryName string, queryValue string) string {
 
 	return u.String()
 }
+
+func GetAllUsers() ([]models.User, error) {
+	var users []models.User
+	result := initializer.DB.Find(&users)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return users, nil
+}
