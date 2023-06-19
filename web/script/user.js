@@ -21,16 +21,20 @@ async function displayProfile() {
 
         if (data.data.ProfileImg !== null){
             div.innerHTML = `
-            <div class='profile_image'>
-                <img src='data:image/jpeg;base64,${data.data.ProfileImg}' alt='${data.data.Username}_profile_img'>
-                <p class='username'>${data.data.Username}</p>
+            <div class="user_image_username">
+                <div class='profile_image'>
+                    <img src='data:image/jpeg;base64,${data.data.ProfileImg}' alt='${data.data.Username}_profile_img'>
+                </div>
+                <h3 class='username'>${data.data.Username}</h3>
             </div>
             `;
         } else {
             div.innerHTML = `
-            <div class='profile_image'>
-                <img src='/img/default_profile_image.jpeg' alt='${data.data.Username}_profile_img'>
-                <p class='username'>${data.data.Username}</p>
+            <div class="user_image_username">
+                <div class='profile_image'>
+                    <img src='/img/default_profile_image.jpeg' alt='${data.data.Username}_profile_img'>
+                </div>
+                <h3 class='username'>${data.data.Username}</h3>
             </div>
             `;
         }

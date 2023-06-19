@@ -21,7 +21,7 @@ document.getElementById("signup_form").addEventListener("submit", function (even
     })
         .then(function (response) {
             if (response.ok) {
-                window.location.href = "/first_connection"
+                window.location.href = "/user"
             } else {
                 window.location.href = "/signup"
             }

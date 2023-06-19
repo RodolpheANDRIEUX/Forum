@@ -124,3 +124,12 @@ func GetAllUsers() ([]models.User, error) {
 	}
 	return users, nil
 }
+
+func GetAllUsersExcept(userID uint) ([]models.User, error) {
+	var users []models.User
+	err := initializer.DB.Where("user_id != ?", userID).Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}

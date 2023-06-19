@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Admin Page</title>
@@ -8,19 +8,46 @@
 <body>
 <h2>Welcome {{ .admin.Username }}</h2>
 <p>Let's kick some posts.</p>
-<div class="all_users">
-    <h3 class="section_header">All users</h3>
-    <p>Click on user's name to see more.</p>
-    {{ range .allUsers }}
-    <button class="accordion">{{ .Username }}</button>
-    <div class="panel">
-        <p>Username: {{ .Username }}</p>
-        <p>Email: {{ .Email }}</p>
-        <p>Role: {{ .Role }}</p>
-        <p>Registered the: {{ .FormattedDate }}</p>
-        <button class="edit" id="">Edit</button>
-    </div>
-    {{ end }}
+<div class="admin_container">
+    <section class="all_users half_width">
+        <h3 class="section_header">All users</h3>
+        <p>Click on user's name to see more.</p>
+        {{ range .allUsers }}
+        <button class="accordion">{{ .Username }}</button>
+        <div class="panel">
+            <div class="form_panel">
+                <form class="user-form" id="user-form-{{ .UserID }}">
+                    <input type="hidden" name="userID" id="userID-{{ .UserID }}" value="{{ .UserID }}">
+                    <p>Username: <textarea name="username" id="username-{{ .UserID }}">{{ .Username }}</textarea></p>
+                    <p>Email: {{ .Email }}</p>
+                    <p>Registered the: {{ .FormattedDate }}</p>
+                    <p>Role:
+                        <select name="role" id="role-{{ .UserID }}">
+                            <option value="administrator" {{ if eq .Role "administrator" }} selected {{ end }}>Administrator</option>
+                            <option value="member" {{ if eq .Role "member" }} selected {{ end }} >Member</option>
+                        </select>
+                    </p>
+                </form>
+                <button class="submit_modifications" onclick="submitModifications({{ .UserID }})"  type="submit">Submit</button>
+            </div>
+            <button class="ban_user" id="ban-{{ .UserID }}">Ban {{ .Username }}</button>
+        </div>
+        {{ end }}
+    </section>
+    <section class="reported_posts half_width">
+        <h3 class="section_header">Reported Posts</h3>
+        <div class="posts_container">
+            {{ range .reportedPosts }}
+            <div class="post">
+                <h2>Post by: {{ .User.Username }}</h2>
+                <p>Message: {{ .Message }}</p>
+                <p>Topic: {{ .Topic }}</p>
+                <p>Reports: {{ .Report }}</p>
+                <button>Delete the post</button>
+            </div>
+            {{ end }}
+        </div>
+    </section>
 </div>
 
 <script src="script/admin.js"></script>

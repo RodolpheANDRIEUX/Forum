@@ -14,6 +14,7 @@ type Post struct {
 	Message   string
 	Picture   []byte
 	Topic     string
+	Report    uint `gorm:"default:0"`
 }
 
 func (p Post) FormattedCreatedAt() string {

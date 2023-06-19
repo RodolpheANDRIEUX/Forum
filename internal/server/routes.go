@@ -28,6 +28,7 @@ func Routes(router *gin.Engine) {
 
 	// admin
 	router.GET("/admin", middleware.RequireAdmin, controllers.Admin)
+	router.POST("/update-user", middleware.RequireAdmin, controllers.UpdateUser)
 
 	// Google OAuth routes
 	router.GET("/auth/google", controllers.HandleGoogleAuth)

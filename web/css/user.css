@@ -141,3 +141,13 @@ body {
 .post p {
     margin: 0 0 5px;
 }
+
+.user_image_username{
+    display: flex;
+    align-items: flex-end;
+    gap:10px;
+}
+
+.username{
+
+}
