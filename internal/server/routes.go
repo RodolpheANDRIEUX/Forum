@@ -41,7 +41,5 @@ func Routes(router *gin.Engine) {
 
 	router.GET("/tenpost", controllers.DisplayPost)
 
-	//router.GET("/user", middleware.RequireAuth, controllers.User)
-
 	router.GET("/validate", middleware.RequireAuth)
 }

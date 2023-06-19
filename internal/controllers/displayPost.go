@@ -13,22 +13,19 @@ func getPost() ([]models.PostWeb, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
-
 	var postsWeb []models.PostWeb
 	for _, post := range posts {
-		/*		var user models.User
-				err := initializer.DB.Model(&models.User{}).Where("user_id = ?", post.UserID).First(&user).Error
-				if err != nil {
-					return nil, err
-				}*/
-
+		var user models.User
+		err := initializer.DB.Model(&models.User{}).Where("user_id = ?", post.UserID).First(&user).Error
+		if err != nil {
+			return nil, err
+		}
 		var likeNumber int
-
 		postWeb := models.PostWeb{
 			PostID:         post.PostID,
-			UserID:         post.User.UserID,
-			Username:       post.User.Username,
-			ProfilePicture: post.User.ProfileImg,
+			UserID:         post.UserID,
+			Username:       user.Username,
+			ProfilePicture: user.ProfileImg,
 			Message:        post.Message,
 			Picture:        post.Picture,
 			Topic:          post.Topic,
@@ -36,12 +33,9 @@ func getPost() ([]models.PostWeb, error) {
 		}
 		postsWeb = append(postsWeb, postWeb)
 	}
-
 	return postsWeb, nil
 }
-
 func DisplayPost(c *gin.Context) {
-
 	postsWeb, err := getPost()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -49,10 +43,8 @@ func DisplayPost(c *gin.Context) {
 		})
 		return
 	}
-
 	c.JSON(http.StatusFound, gin.H{
 		"posts": postsWeb,
 	})
 	return
-
 }

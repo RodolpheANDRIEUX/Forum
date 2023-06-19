@@ -14,6 +14,7 @@ func ConnectToDb() {
 	var err error
 
 	dsn := os.Getenv("LOGIN_DB")
+
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -21,5 +22,4 @@ func ConnectToDb() {
 	}
 
 	log.Println("connected to ", DB)
-
 }

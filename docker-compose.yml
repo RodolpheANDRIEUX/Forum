@@ -1,0 +1,24 @@
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=${LOGIN_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mavowpjc -h mel.db.elephantsql.com -d mavowpjc"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    container_name: api_server
+    ports:
+      - ${PORT}:${PORT}
+    env_file: .env
+
+    depends_on:
+      - db
+    build: .
+
+volumes:
+  postgres_data:
