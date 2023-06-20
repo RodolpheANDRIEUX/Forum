@@ -14,6 +14,8 @@ type Post struct {
 	Message   string
 	Picture   []byte
 	Topic     string
+	Like      int `json:"Like"`    // provisoire
+	Comment   int `json:"Comment"` // provisoire
 }
 
 func (p Post) FormattedCreatedAt() string {
@@ -22,16 +24,4 @@ func (p Post) FormattedCreatedAt() string {
 
 func (p Post) EncodedImage() string {
 	return base64.StdEncoding.EncodeToString(p.Picture)
-}
-
-type PostWeb struct {
-	PostID         uint   ` json:"post_id"`
-	UserID         uint   `json:"user_id"`
-	Username       string `json:"username"`
-	ProfilePicture []byte `json:"profilPicture"`
-	Message        string `json:"message"`
-	Picture        []byte `json:"picture"`
-	Topic          string `json:"topic"`
-	Reply          int    `json:"reply"`
-	Like           int    `json:"like"`
 }

@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Forum</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" type="text/css" href="./style/page.css">
-  <link rel="stylesheet" type="text/css" href="./style/post.css">
+  <link rel="stylesheet" type="text/css" href="./css/page.css">
+  <link rel="stylesheet" type="text/css" href="./css/post.css">
 </head>
 
 <body>
@@ -46,21 +46,25 @@
 
       <section id="new-post">
         <form action="/post">
-
         </form>
+        <iframe src="http://localhost:3000/home" width="800" height="600"></iframe>
       </section>
 
-      <section id="filters">
-      </section>
 
-      <!--    <template id="post-template">-->
-      <article class="post">
+<!--      <section id="filters">-->
+<!--      </section>-->
+
+          <template id="post-template">
+      <article class="post" data-post-id="">
         <header>
           <img src="./img/RivenGPT.jpg" alt="profile pic" class="profile-pic">
-          <span class="post-author">Tilted Riven</span>
+          <span class="post-author"></span>
           <span class="open-dialog">...</span>
         </header>
-        <p class="post-body">post content</p>
+        <div class="post-body">
+          <p class="post-content"></p>
+          <img src="" alt="" class="post-image">
+        </div>
         <footer>
           <div class="post-reactions">
             <i class="fa-regular fa-heart fa-shake fa-2xl"></i>
@@ -68,14 +72,14 @@
             <i class="fa-solid fa-share-nodes fa-2xl"></i>
           </div>
           <div class="reactions-numbers">
-            <span class="likes">1.2k</span>
-            <span class="comments">36</span>
+            <span class="likes">0</span>
+            <span class="comments">0</span>
           </div>
         </footer>
       </article>
-      <!--    </template>-->
+          </template>
 
-      <!-- add posts ici -->
+      <!-- add posts here -->
     </div>
 
 

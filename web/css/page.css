@@ -120,15 +120,16 @@ body {
 }
 
 #new-post{
-    border: green dashed 2px;
-    height: 200px;
+    /*border: green dashed 2px;*/
+    height: 300px;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 #filters{
-    border: pink dashed 2px;
+    /*border: pink dashed 2px;*/
     height: 100px;
 }
-
 
 
 /* RIGHT MENU */

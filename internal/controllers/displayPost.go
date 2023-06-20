@@ -1,42 +1,37 @@
 package controllers
 
 import (
+	"forum/Log"
 	"forum/internal/initializer"
 	"forum/internal/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
-func getPost() ([]models.PostWeb, error) {
+func getPost(offset int, limit int) ([]models.Post, error) {
 	var posts []models.Post
-	result := initializer.DB.Order("created_at desc").Limit(15).Find(&posts)
-	if result.Error != nil {
-		return nil, result.Error
+
+	err := initializer.DB.Order("created_at desc").Offset(offset).Limit(limit).Preload("User").Find(&posts).Error
+	if err != nil {
+		Log.Err.Println("Failed to retrieve posts:", err)
+		return nil, err
 	}
-	var postsWeb []models.PostWeb
-	for _, post := range posts {
-		var user models.User
-		err := initializer.DB.Model(&models.User{}).Where("user_id = ?", post.UserID).First(&user).Error
-		if err != nil {
-			return nil, err
-		}
-		var likeNumber int
-		postWeb := models.PostWeb{
-			PostID:         post.PostID,
-			UserID:         post.UserID,
-			Username:       user.Username,
-			ProfilePicture: user.ProfileImg,
-			Message:        post.Message,
-			Picture:        post.Picture,
-			Topic:          post.Topic,
-			Like:           likeNumber,
-		}
-		postsWeb = append(postsWeb, postWeb)
-	}
-	return postsWeb, nil
+
+	return posts, nil
 }
+
 func DisplayPost(c *gin.Context) {
-	postsWeb, err := getPost()
+	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	limit := 10
+
+	offset := (page - 1) * limit
+
+	posts, err := getPost(offset, limit)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -44,7 +39,7 @@ func DisplayPost(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusFound, gin.H{
-		"posts": postsWeb,
+		"posts": posts,
 	})
 	return
 }
