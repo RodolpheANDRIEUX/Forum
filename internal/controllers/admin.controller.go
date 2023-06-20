@@ -84,16 +84,48 @@ func DeletePost(c *gin.Context) {
 	}
 
 	// delete the post
-	err = utils.UpdatePost(body.PostID, post.Message, true)
+	err = utils.UpdatePost(body.PostID, post.Message, true, post.Report)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
-	err = sendNotification(post.User.UserID, "One pose has been deleted by "+body.Admin)
+	err = sendNotification(post.User.UserID, "One post has been deleted by "+body.Admin)
 
 	// respond
 	c.JSON(http.StatusOK, gin.H{"error": "Post deleted"})
+}
+
+func IgnoreReport(c *gin.Context) {
+	type Body struct {
+		PostID uint   `json:"postID"`
+		Admin  string `json:"admin"`
+	}
+	var body Body
+	err := c.ShouldBind(&body)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	post, err := utils.GetPost(body.PostID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	// un-report the post
+	err = utils.UpdatePost(body.PostID, post.Message, false, 0)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	err = sendNotification(post.User.UserID, "One post reported has been verified by "+body.Admin+" and unreported.")
+
+	// respond
+	c.JSON(http.StatusOK, gin.H{"error": "Post unreported"})
 }
 
 func BanUser(c *gin.Context) {

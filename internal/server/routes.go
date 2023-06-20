@@ -30,6 +30,7 @@ func Routes(router *gin.Engine) {
 	router.GET("/admin", middleware.RequireAdmin, controllers.Admin)
 	router.POST("/update-user", middleware.RequireAdmin, controllers.UpdateUser)
 	router.POST("/delete-post", middleware.RequireAdmin, controllers.DeletePost)
+	router.POST("/ignore-report", middleware.RequireAdmin, controllers.IgnoreReport)
 	router.POST("/ban-user", middleware.RequireAdmin, controllers.BanUser)
 
 	// Google OAuth routes

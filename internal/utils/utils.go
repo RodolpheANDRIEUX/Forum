@@ -139,8 +139,8 @@ func UpdateUser(userID uint, username string, role string) error {
 	return result.Error
 }
 
-func UpdatePost(postID uint, message string, deleted bool) error {
-	result := initializer.DB.Model(&models.Post{}).Where("post_id = ?", postID).Updates(models.Post{Message: message, Deleted: deleted})
+func UpdatePost(postID uint, message string, deleted bool, reported uint) error {
+	result := initializer.DB.Model(&models.Post{}).Where("post_id = ?", postID).Updates(models.Post{Message: message, Deleted: deleted, Report: reported})
 	return result.Error
 }
 

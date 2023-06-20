@@ -9,7 +9,7 @@
 {{ $adminRole := .admin.Role }}
 <div class="container">
     <h2 class="shiny">Welcome <span id="admin_name">{{ .admin.Username }}</span></h2>
-    <p>Let's kick some posts.</p>
+    <p>Let's kick some <s>assess</s> posts...</p>
     <div class="admin_container">
         <section class="all_users half_width">
             <h3 class="section_header shiny_pink">All users</h3>
@@ -42,7 +42,7 @@
                         </p>
                     </form>
 
-                    <div class="submit_container">
+                    <div class="buttons_container">
                         <button class="submit_modifications" onclick="submitModifications({{ .UserID }})" type="submit">
                             Submit
                         </button>
@@ -64,7 +64,11 @@
                     <p>Message: {{ .Message }}</p>
                     <p>Topic: {{ .Topic }}</p>
                     <p>Reports: {{ .Report }}</p>
-                    <button class="delete_post" id="delete_post_{{ .PostID }}" onclick="deletePost({{ .PostID }})">Delete the post</button>
+
+                    <div class="buttons_container">
+                        <button class="ignore_report" id="ignore_post_{{ .PostID }}" onclick="ignorePost({{ .PostID }})">Ignore report</button>
+                        <button class="delete_post" id="delete_post_{{ .PostID }}" onclick="deletePost({{ .PostID }})">Delete the post</button>
+                    </div>
                 </div>
                 {{ end }}
             </div>

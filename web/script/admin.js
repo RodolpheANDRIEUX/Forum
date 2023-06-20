@@ -68,6 +68,32 @@ async function deletePost(id){
     }).catch(e => {console.log('error:',e)})
 }
 
+async function ignorePost(id){
+    const btn = document.getElementById(`ignore_post_${id}`)
+    btn.disabled = true;
+
+    const admin = document.getElementById('admin_name').innerText
+    await fetch("/ignore-report", {
+        method : "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'postID': id,
+            'admin': admin,
+        }),
+    }).then(async response => {
+        if (response.ok) {
+            window.location.href = "/admin"
+        } else {
+            const data = response.json();
+            displayError(data.error);
+            btn.disabled = false;
+            console.log(data.error);
+        }
+    }).catch(e => {console.log('error:',e)})
+}
+
 function displayError(msg){
     const error = document.createElement("p");
     error.textContent = msg;
