@@ -7,8 +7,10 @@ for (i = 0; i < acc.length; i++) {
         const panel = this.nextElementSibling;
         if (panel.style.maxHeight) {
             panel.style.maxHeight = null;
+            panel.style.marginBottom = "0";
         } else {
-            panel.style.maxHeight = panel.scrollHeight + "px";
+            panel.style.maxHeight = "100%";
+            panel.style.marginBottom = "5px";
         }
     });
 }
@@ -99,3 +101,20 @@ async function banUser(id){
         }
     }).catch(e => {console.log('error:',e)})
 }
+
+
+// show the searched user
+const searchUser = document.getElementById("search_user")
+const accordions = document.getElementsByClassName("accordion");
+
+searchUser.addEventListener("input", function() {
+    const typingValue = this.value.toLowerCase();
+    for (const accordion of accordions) {
+        const username = accordion.textContent.toLowerCase();
+        if (username.includes(typingValue)){
+            accordion.style.display = "block";
+        } else {
+            accordion.style.display = "none";
+        }
+    }
+});

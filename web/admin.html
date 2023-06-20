@@ -7,51 +7,69 @@
 </head>
 <body>
 {{ $adminRole := .admin.Role }}
-<h2>Welcome <span id="admin_name">{{ .admin.Username }}</span></h2>
-<p>Let's kick some posts.</p>
-<div class="admin_container">
-    <section class="all_users half_width">
-        <h3 class="section_header">All users</h3>
-        <p>Click on user's name to see more.</p>
-        {{ range .allUsers }}
-        <button class="accordion" {{ if eq .Role "banned" }}style="color:red"{{ end }} >{{ .Username }}</button>
-        <div class="panel">
-            <div class="form_panel">
-                <form class="user-form" id="user-form-{{ .UserID }}">
-                    <input type="hidden" name="userID" id="userID-{{ .UserID }}" value="{{ .UserID }}">
-                    <p>Username: <textarea name="username" id="username-{{ .UserID }}">{{ .Username }}</textarea></p>
-                    <p>Email: {{ .Email }}</p>
-                    <p>Registered the: {{ .FormattedDate }}</p>
-                    <p>Role:
-                        <select name="role" id="role-{{ .UserID }}" {{ if ne $adminRole "administrator" }}disabled{{ end }}>
+<div class="container">
+    <h2 class="shiny">Welcome <span id="admin_name">{{ .admin.Username }}</span></h2>
+    <p>Let's kick some posts.</p>
+    <div class="admin_container">
+        <section class="all_users half_width">
+            <h3 class="section_header shiny_pink">All users</h3>
+
+            <input list="search" name="search_user" id="search_user" placeholder="Search an user:">
+            <datalist id="search">
+                {{ range .allUsers }}
+                <option value="{{ .Username }}"></option>
+                {{ end }}
+            </datalist>
+
+            <p>Click on user's name to see more.</p>
+            {{ range .allUsers }}
+            <div class="half_container">
+            <button class="accordion" {{ if eq .Role "banned" }}style="color:red"{{ end }} >{{ .Username }}</button>
+            <div class="panel">
+                <div class="form_panel">
+                    <form class="user-form" id="user-form-{{ .UserID }}">
+                        <input type="hidden" name="userID" id="userID-{{ .UserID }}" value="{{ .UserID }}">
+                        <p>Username: <textarea name="username" id="username-{{ .UserID }}">{{ .Username }}</textarea>
+                        </p>
+                        <p>Email: {{ .Email }}</p>
+                        <p>Registered the: {{ .FormattedDate }}</p>
+                        <p>Role:
+                            <select name="role" id="role-{{ .UserID }}" {{ if ne $adminRole "administrator" }}disabled{{ end }}>
                             <option value="moderator" {{ if eq .Role "moderator" }} selected {{ end }}>Moderator</option>
                             <option value="member" {{ if eq .Role "member" }} selected {{ end }} >Member</option>
                             <option value="member" {{ if eq .Role "banned" }} selected {{ end }} >Banned</option>
-                        </select>
-                    </p>
-                </form>
-                <button class="submit_modifications" onclick="submitModifications({{ .UserID }})"  type="submit">Submit</button>
+                            </select>
+                        </p>
+                    </form>
+
+                    <div class="submit_container">
+                        <button class="submit_modifications" onclick="submitModifications({{ .UserID }})" type="submit">
+                            Submit
+                        </button>
+                        {{ if or (ne .Role "moderator") (eq $adminRole "administrator") }}
+                        <button class="ban_user" id="ban_user_{{ .UserID }}" onclick="banUser({{ .UserID }})" {{ if eq .Role "banned" }} disabled {{ end }} > Ban {{ .Username }}</button>
+                        {{ end }}
+                    </div>
+                </div>
             </div>
-            {{ if or (ne .Role "moderator") (eq $adminRole "administrator") }}
-            <button class="ban_user" id="ban_user_{{ .UserID }}" onclick="banUser({{ .UserID }})" {{ if eq .Role "banned" }} disabled {{ end }}  > Ban {{ .Username }}</button>
-            {{ end }}
-        </div>
-        {{ end }}
-    </section>
-    <section class="reported_posts half_width">
-        <h3 class="section_header">Reported Posts</h3>
-        <div class="posts_container">
-            {{ range .reportedPosts }}
-            <div class="post">
-                <h2>Post by: {{ .User.Username }}</h2>
-                <p>Message: {{ .Message }}</p>
-                <p>Topic: {{ .Topic }}</p>
-                <p>Reports: {{ .Report }}</p>
-                <button id="delete_post_{{ .PostID }}" onclick="deletePost({{ .PostID }})">Delete the post</button>
             </div>
             {{ end }}
-        </div>
-    </section>
+        </section>
+        <section class="reported_posts half_width">
+            <h3 class="section_header shiny_pink">Reported Posts</h3>
+            <div class="half_container">
+                {{ range .reportedPosts }}
+                <div class="post">
+                    <h2>Post by: {{ .User.Username }}</h2>
+                    <p>Message: {{ .Message }}</p>
+                    <p>Topic: {{ .Topic }}</p>
+                    <p>Reports: {{ .Report }}</p>
+                    <button class="delete_post" id="delete_post_{{ .PostID }}" onclick="deletePost({{ .PostID }})">Delete the post</button>
+                </div>
+                {{ end }}
+            </div>
+        </section>
+    </div>
 </div>
 
 <script src="script/admin.js"></script>
