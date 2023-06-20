@@ -14,7 +14,7 @@
         <h3 class="section_header">All users</h3>
         <p>Click on user's name to see more.</p>
         {{ range .allUsers }}
-        <button class="accordion">{{ .Username }}</button>
+        <button class="accordion" {{ if eq .Role "banned" }}style="color:red"{{ end }} >{{ .Username }}</button>
         <div class="panel">
             <div class="form_panel">
                 <form class="user-form" id="user-form-{{ .UserID }}">
@@ -26,13 +26,14 @@
                         <select name="role" id="role-{{ .UserID }}" {{ if ne $adminRole "administrator" }}disabled{{ end }}>
                             <option value="moderator" {{ if eq .Role "moderator" }} selected {{ end }}>Moderator</option>
                             <option value="member" {{ if eq .Role "member" }} selected {{ end }} >Member</option>
+                            <option value="member" {{ if eq .Role "banned" }} selected {{ end }} >Banned</option>
                         </select>
                     </p>
                 </form>
                 <button class="submit_modifications" onclick="submitModifications({{ .UserID }})"  type="submit">Submit</button>
             </div>
             {{ if or (ne .Role "moderator") (eq $adminRole "administrator") }}
-            <button class="ban_user" id="ban_user_{{ .UserID }}" onclick="banUser({{ .UserID }})"> Ban {{ .Username }}</button>
+            <button class="ban_user" id="ban_user_{{ .UserID }}" onclick="banUser({{ .UserID }})" {{ if eq .Role "banned" }} disabled {{ end }}  > Ban {{ .Username }}</button>
             {{ end }}
         </div>
         {{ end }}

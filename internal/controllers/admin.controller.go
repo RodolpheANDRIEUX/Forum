@@ -90,7 +90,7 @@ func DeletePost(c *gin.Context) {
 		return
 	}
 
-	// TODO: send a notification au user
+	err = sendNotification(post.User.UserID, "One pose has been deleted by "+body.Admin)
 
 	// respond
 	c.JSON(http.StatusOK, gin.H{"error": "Post deleted"})
@@ -115,8 +115,12 @@ func BanUser(c *gin.Context) {
 		return
 	}
 
-	// TODO: send a notification au user
-	// TODO: delete the jwt
+	// send a notification to the user
+	err = sendNotification(body.UserID, "You have been BANNED by "+body.Admin)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
 
 	// ban the user
 	err = utils.UpdateUser(body.UserID, utils.CreateUniqueUsername(user.Email), "banned")
