@@ -3,7 +3,6 @@ package server
 import (
 	"forum/Log"
 	"forum/internal/initializer"
-	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"log"
 )
@@ -14,8 +13,7 @@ func Serve() {
 	// parse assets and templates
 	router.Static("/css", "./web/css")
 	router.Static("/script", "./web/script")
-
-	router.Use(static.Serve("/uploads", static.LocalFile("./assets/uploads", true)))
+	router.Static("/img", "./web/img")
 
 	router.LoadHTMLGlob("web/*.html")
 	router.MaxMultipartMemory = 20 << 20 // 20 MiB

@@ -1,53 +1,102 @@
-// alert("js ok");
+document.addEventListener("DOMContentLoaded", function() {
+    let currentPage = 1;
+    fetchPostsAndDisplayInFeed(currentPage);
+    window.addEventListener("scroll", handleScroll);
+    document.getElementById("feed").addEventListener('click', handleFeedClick);
+});
 
-function clonePost(times) {
-    const feed = document.getElementById("feed");
-    const post = document.querySelector(".post");
-
-    for (let i = 0; i < times; i++) {
-        const clonedPost = post.cloneNode(true);
-        feed.appendChild(clonedPost);
+function handleScroll() {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        currentPage += 1;
+        fetchPostsAndDisplayInFeed(currentPage);
     }
 }
 
-window.addEventListener("scroll", function() {
-    const scrollHeight = document.documentElement.scrollHeight;
-    const scrollTop = document.documentElement.scrollTop;
-    const clientHeight = document.documentElement.clientHeight;
-
-    const isBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
-
-    if (isBottom) {
-        setTimeout(function() {
-            clonePost(5);
-        }, 1000);
+function handleFeedClick(event) {
+    // Handle like button click
+    if (event.target.matches('.fa-heart')) {
+        const postId = event.target.closest('.post').dataset.postId;
+        incrementLikes(postId);
     }
-});
 
-clonePost(5);
-
-let openDialogButtons = document.getElementsByClassName('open-dialog');
-let postMenuDialog = document.getElementById('post-menu');
-
-for (let i = 0; i < openDialogButtons.length; i++) {
-    openDialogButtons[i].addEventListener('click', function() {
+    // Handle dialog button click
+    if (event.target.matches('.open-dialog')) {
+        const postMenuDialog = document.getElementById('post-menu');
         if (typeof postMenuDialog.showModal === "function") {
             postMenuDialog.showModal();
         } else {
             console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
         }
-    });
+    }
+
+    // Handle dialog close click
+    if (event.target.matches('#post-menu')) {
+        const postMenuDialog = event.target;
+        const dialogDimensions = postMenuDialog.getBoundingClientRect();
+        if (
+            event.clientX < dialogDimensions.left ||
+            event.clientX > dialogDimensions.right ||
+            event.clientY < dialogDimensions.top ||
+            event.clientY > dialogDimensions.bottom
+        ) {
+            postMenuDialog.close();
+        }
+    }
 }
 
-postMenuDialog.addEventListener("click", e => {
-    const dialogDimensions = postMenuDialog.getBoundingClientRect()
-    if (
-        e.clientX < dialogDimensions.left ||
-        e.clientX > dialogDimensions.right ||
-        e.clientY < dialogDimensions.top ||
-        e.clientY > dialogDimensions.bottom
-    ) {
-        postMenuDialog.close()
-    }
-})
+async function fetchPostsAndDisplayInFeed(page) {
+    try {
+        const response = await fetch(`/showPost?page=${page}`);
+        const data = await response.json();
 
+        if (data && data.posts) {
+            const feed = document.getElementById("feed");
+            const postTemplate = document.getElementById("post-template").content;
+
+            data.posts.forEach(post => {
+                const postClone = postTemplate.cloneNode(true);
+
+                postClone.querySelector('.post').setAttribute('data-post-id', post.PostID);
+                postClone.querySelector(".post-author").textContent = post.User.Username || 'Anonymous';
+                postClone.querySelector(".post-content").textContent = post.Message;
+                postClone.querySelector(".likes").textContent = post.Like;
+                postClone.querySelector(".comments").textContent = post.Comment;
+
+                if (post.User.ProfileImg) {
+                    const profileImageElement = postClone.querySelector(".profile-pic");
+                    profileImageElement.src = 'data:image/png;base64,' + post.User.ProfileImg;
+                } else {
+                    postClone.querySelector(".profile-pic").src = './img/default_profile_image.jpeg';
+                }
+                if (post.Picture) {
+                    const imageElement = postClone.querySelector(".post-image");
+                    imageElement.src = 'data:image/png;base64,' + post.Picture;
+                    imageElement.style.display = 'block';
+                }
+
+                feed.appendChild(postClone);
+            });
+        }
+    } catch (error) {
+        console.error("Erreur lors de la récupération des posts:", error);
+    }
+}
+
+async function incrementLikes(postId) {
+    try {
+        const response = await fetch(`/incrementLikes/${postId}`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+            const likesElement = postElement.querySelector('.likes');
+            likesElement.textContent = data.newLikes;
+        } else {
+            console.error('Failed to increment likes');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
