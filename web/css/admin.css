@@ -1,6 +1,58 @@
+html {
+    background-image: url('https://i.imgur.com/yA95dHn.png');
+    background-size: 100% auto;
+    background-repeat: repeat;
+    background-color: #10141B;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: hidden;
+    color: white;
+    font-family: "police", sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 1200px;
+    margin: 0 20px;
+}
+
+.admin_container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow: auto;
+}
+
+.half_width {
+    width: 50%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 3px solid #D8F3DC;
+    box-shadow: inset 0 0 6px 1px #D8F3DC;
+    margin-bottom: 10px;
+    padding: 30px 20px 0;
+}
+
+.half_container {
+    overflow: auto;
+}
+
 .accordion {
-    background-color: #eee;
-    color: #444;
+    background: #d8f3dc;
+    color: #000;
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -9,15 +61,20 @@
     outline: none;
     font-size: 15px;
     transition: 0.4s;
+    margin-bottom: 3px;
+}
+
+.accordion.active{
+    margin-bottom: 0;
 }
 
 .active, .accordion:hover {
-    background-color: #ccc;
+    background-color: white;
 }
 
 .accordion:after {
     content: '\002B';
-    color: #777;
+    color: black;
     font-weight: bold;
     float: right;
     margin-left: 5px;
@@ -27,10 +84,107 @@
     content: "\2212";
 }
 
+.buttons_container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+textarea {
+    background: #D8F3DC;
+    color: black;
+    border: none;
+    padding: 0;
+    font: inherit;
+    outline: inherit;
+    resize: none;
+    height: 16px;
+    width: auto;
+}
+
 .panel {
-    padding: 0 18px;
-    background-color: white;
+    padding: 0 10px;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    border-top: 0;
+    backdrop-filter: blur(12px);
+}
+
+.post {
+    border: 1px solid black;
+    padding: 10px;
+    margin-bottom: 10px;
+    backdrop-filter: blur(12px);
+    border-radius: 5px;
+}
+
+.shiny {
+    font-size: 26px;
+    color: #D8F3DC;
+    font-family: "police", sans-serif;
+    text-shadow: 0 0 10px #D8F3DC;
+}
+
+.shiny_pink{
+    margin: 0 0 10px;
+    font-size: 26px;
+    color: #ffffff;
+    text-shadow: 0 0 10px #F3D8EF;
+}
+
+.delete_post,.ban_user {
+    background: #ff0000;
+    color: inherit;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    transition: all 0.2s ease-out;
+}
+
+.delete_post:hover,.ban_user:hover{
+    background: #ff7300;
+}
+
+.submit_modifications, .ignore_report{
+    background: #fff;
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    transition: all 0.2s ease-out;
+}
+
+.submit_modifications:hover{
+    background: #F3D8EF;
+}
+
+button:disabled, button:disabled:hover  {
+    cursor: not-allowed;
+    background-color: #cccccc;
+    color: #666666;
+    border: 2px solid #999999;
+}
+
+#search_user{
+    border: 3px solid #D8F3DC;
+    box-shadow: inset 0 0 6px 1px #D8F3DC;
+    height: 2rem;
+    background-color: transparent;
+    font-family: inherit;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    padding-left: 5px;
+}
+
+#search_user::placeholder{
+    color: #D8F3DC;
+    font-family: inherit;
 }

@@ -9,13 +9,15 @@ type Post struct {
 	PostID    uint `gorm:"primaryKey;autoIncrement"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	Deleted   bool `gorm:"default:false"`
 	UserID    uint `gorm:"not null"`
 	User      User
 	Message   string
 	Picture   []byte
 	Topic     string
-	Like      int `json:"Like"`    // provisoire
-	Comment   int `json:"Comment"` // provisoire
+	Like      int  `json:"Like"`    // provisoire
+	Comment   int  `json:"Comment"` // provisoire
+	Report    uint `gorm:"default:0"`
 }
 
 func (p Post) FormattedCreatedAt() string {
