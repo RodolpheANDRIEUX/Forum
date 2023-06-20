@@ -70,7 +70,7 @@ func HandleGoogleCallback(c *gin.Context) {
 			return
 		}
 		// redirect to the configuration of the account
-		c.Redirect(http.StatusFound, "/first_connection")
+		c.Redirect(http.StatusFound, "/user")
 		return
 	}
 }

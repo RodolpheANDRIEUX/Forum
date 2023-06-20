@@ -9,6 +9,7 @@ type Post struct {
 	PostID    uint `gorm:"primaryKey;autoIncrement"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	Deleted   bool `gorm:"default:false"`
 	UserID    uint `gorm:"not null"`
 	User      User
 	Message   string

@@ -37,7 +37,65 @@ async function submitModifications(id){
             const data = await response.json();
             console.log(data.error)
         }
-    })
+    }).catch(e => {console.log('error:',e)})
 }
 
+async function deletePost(id){
+    const btn = document.getElementById(`delete_post_${id}`)
+    btn.disabled = true;
 
+    const admin = document.getElementById('admin_name').innerText
+    await fetch("/delete-post", {
+        method : "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'postID': id,
+            'admin': admin,
+        }),
+    }).then(async response => {
+        if (response.ok) {
+            window.location.href = "/admin"
+        } else {
+            const data = response.json();
+            displayError(data.error);
+            btn.disabled = false;
+            console.log(data.error);
+        }
+    }).catch(e => {console.log('error:',e)})
+}
+
+function displayError(msg){
+    const error = document.createElement("p");
+    error.textContent = msg;
+    error.style.color = "red";
+    const post = document.getElementsByClassName("post");
+    post.appendChild(error);
+}
+
+async function banUser(id){
+    const btn = document.getElementById(`ban_user_${id}`)
+    btn.disabled = true;
+
+    const admin = document.getElementById('admin_name').innerText
+    await fetch("/ban-user", {
+        method : "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'userID': id,
+            'admin': admin,
+        }),
+    }).then(async response => {
+        if (response.ok) {
+            window.location.href = "/admin"
+        } else {
+            const data = response.json();
+            displayError(data.error);
+            btn.disabled = false;
+            console.log(data.error);
+        }
+    }).catch(e => {console.log('error:',e)})
+}

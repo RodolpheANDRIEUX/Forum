@@ -30,7 +30,7 @@ func Signup(c *gin.Context) {
 	}
 
 	// redirect to the configuration of the account
-	c.Redirect(http.StatusFound, "first_connection")
+	c.Redirect(http.StatusFound, "/user")
 }
 
 func SignupAndStore(c *gin.Context, body Body) (error, int) {

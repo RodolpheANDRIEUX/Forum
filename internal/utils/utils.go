@@ -116,20 +116,42 @@ func AddQuery(link string, queryName string, queryValue string) string {
 	return u.String()
 }
 
-func GetAllUsers() ([]models.User, error) {
-	var users []models.User
-	result := initializer.DB.Find(&users)
+func GetUser(userID uint) (models.User, error) {
+	var user models.User
+	result := initializer.DB.First(&user, userID)
 	if result.Error != nil {
-		return nil, result.Error
+		return user, result.Error
 	}
-	return users, nil
+	return user, nil
 }
 
-func GetAllUsersExcept(userID uint) ([]models.User, error) {
+func GetAllUsersExceptAdmins() ([]models.User, error) {
 	var users []models.User
-	err := initializer.DB.Where("user_id != ?", userID).Find(&users).Error
+	err := initializer.DB.Where("role != ?", "administrator").Find(&users).Error
 	if err != nil {
 		return nil, err
 	}
 	return users, nil
+}
+
+func UpdateUser(userID uint, username string, role string) error {
+	result := initializer.DB.Model(&models.User{}).Where("user_id = ?", userID).Updates(models.User{Username: username, Role: role})
+	return result.Error
+}
+
+func UpdatePost(postID uint, message string, deleted bool) error {
+	result := initializer.DB.Model(&models.Post{}).Where("post_id = ?", postID).Updates(models.Post{Message: message, Deleted: deleted})
+	return result.Error
+}
+
+func GetPost(postID uint) (models.Post, error) {
+	var post models.Post
+
+	err := initializer.DB.First(&post, postID)
+
+	if err != nil {
+		return post, err.Error
+	}
+
+	return post, nil
 }

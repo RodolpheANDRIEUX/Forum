@@ -13,10 +13,6 @@ type User struct {
 	Email      string `gorm:"unique"`
 	ProfileImg []byte
 	Password   string
-
-	//Posts []Post `gorm:"foreignKey:UserID"`
-	//Like  []Like  `gorm:"foreignKey:UserID"`
-	//Reply []Reply `gorm:"foreignKey:UserID"`
 }
 
 func (p User) FormattedDate() string {

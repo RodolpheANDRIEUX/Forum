@@ -40,8 +40,8 @@ func RequireAdmin(c *gin.Context) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 
-		// Final check - Check if the user is admin
-		if user.Role != "administrator" {
+		// Final check - Check if the user is admin or moderator
+		if user.Role == "member" {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 

@@ -18,6 +18,7 @@ func Serve() {
 	router.Use(static.Serve("/uploads", static.LocalFile("./assets/uploads", true)))
 
 	router.LoadHTMLGlob("web/*.html")
+	//router.LoadHTMLGlob("web/*.gohtml")
 	router.MaxMultipartMemory = 20 << 20 // 20 MiB
 
 	gin.DefaultWriter = initializer.LogFile
