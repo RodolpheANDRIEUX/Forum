@@ -1,5 +1,6 @@
+let currentPage = 1;
+
 document.addEventListener("DOMContentLoaded", function() {
-    let currentPage = 1;
     fetchPostsAndDisplayInFeed(currentPage);
     window.addEventListener("scroll", handleScroll);
     document.getElementById("feed").addEventListener('click', handleFeedClick);
@@ -24,22 +25,22 @@ function handleFeedClick(event) {
         const postMenuDialog = document.getElementById('post-menu');
         if (typeof postMenuDialog.showModal === "function") {
             postMenuDialog.showModal();
+
+            // Ajout de l'écouteur d'événements pour fermer le dialogue en cliquant à l'extérieur
+            postMenuDialog.addEventListener('click', (e) => {
+                const rect = postMenuDialog.getBoundingClientRect();
+                if (
+                    e.clientX < rect.left ||
+                    e.clientX > rect.right ||
+                    e.clientY < rect.top ||
+                    e.clientY > rect.bottom
+                ) {
+                    postMenuDialog.close();
+                }
+            });
+
         } else {
             console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
-        }
-    }
-
-    // Handle dialog close click
-    if (event.target.matches('#post-menu')) {
-        const postMenuDialog = event.target;
-        const dialogDimensions = postMenuDialog.getBoundingClientRect();
-        if (
-            event.clientX < dialogDimensions.left ||
-            event.clientX > dialogDimensions.right ||
-            event.clientY < dialogDimensions.top ||
-            event.clientY > dialogDimensions.bottom
-        ) {
-            postMenuDialog.close();
         }
     }
 }
