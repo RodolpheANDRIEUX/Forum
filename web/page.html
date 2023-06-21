@@ -16,6 +16,8 @@
 
 <body>
 
+<div id="message"></div>
+
 <div id="overlay_login"></div>
 <div id="login_container" class="login_container">
   <div class="tab">
@@ -106,7 +108,7 @@
     <dialog id="post-menu">
       <ul>
         <li><a href="#">Author</a></li>
-        <li><a href="#">Report</a></li>
+        <li><a onclick="reportPost(event)">Report</a></li>
       </ul>
     </dialog>
 
@@ -156,6 +158,9 @@
           </div>
           <div class="icon-wrapper">
             <i class="fa-solid fa-share-nodes fa-2xl"></i>
+          </div>
+          <div class="icon-wrapper report">
+            <a onclick="reportPost(event)">Report</a>
           </div>
         </footer>
       </article>

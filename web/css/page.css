@@ -358,3 +358,25 @@ footer {
 .fab {
     font-size: 20px;
 }
+
+.report a{
+    color: #F3D8EF;
+}
+
+#message {
+    color: #F3D8EF;
+    font-family: 'Darker Grotesque', sans-serif;
+    text-shadow: 0 0 10px #F3D8EF;
+    font-size: 1.5rem;
+    transition: opacity 0.3s ease-in-out;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    z-index: 10000;
+}
+
+#message.show {
+    opacity: 1;
+}

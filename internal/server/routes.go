@@ -32,6 +32,8 @@ func Routes(router *gin.Engine) {
 	router.GET("/post", controllers.UniquePost)
 	router.POST("/reply", controllers.Reply)
 
+	router.POST("/report", middleware.RequireAuth, controllers.RepostPost)
+
 	// admin
 	router.GET("/admin", middleware.RequireAdmin, controllers.Admin)
 	router.POST("/update-user", middleware.RequireAdmin, controllers.UpdateUser)
@@ -53,4 +55,5 @@ func Routes(router *gin.Engine) {
 	router.POST("/incrementLikes/:postId", controllers.IncrementLikes)
 
 	router.GET("/validate_admin", middleware.RequireAdmin)
+	router.GET("/validate_auth", middleware.RequireAuth)
 }

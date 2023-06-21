@@ -133,3 +133,35 @@ overlay.addEventListener("click", ev => {
     loginContainer.style.display = "none"
     overlay.style.display = "none"
 })
+
+async function reportPost(event) {
+    let article = event.target.closest('article');
+    let postId = article.getAttribute('data-post-id');
+    try {
+        const response = await fetch('/report', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'postId':postId })
+        });
+
+        if (response.ok){
+            if (response.ok) {
+                const messageElement = document.getElementById('message');
+                messageElement.textContent = 'Post reported successfully';
+                messageElement.classList.add('show');
+
+                setTimeout(() => {
+                    messageElement.textContent = '';
+                    messageElement.classList.remove('show');
+                }, 3000);
+            }
+        } else {
+            const data = await response.json();
+            console.log(data.error)
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}

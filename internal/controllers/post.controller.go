@@ -95,3 +95,48 @@ func Reply(c *gin.Context) {
 		"reply": reply,
 	})
 }
+
+func RepostPost(c *gin.Context) {
+	type Body struct {
+		PostID string `json:"postID"`
+	}
+
+	var body Body
+	err := c.ShouldBind(&body)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	postID, err := strconv.Atoi(body.PostID)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	// get the post
+	post, err := utils.GetPost(uint(postID))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// increment the report counter
+	err = utils.UpdatePost(post.PostID, post.Message, post.Deleted, post.Report+1)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// send a notification to the creator of the post
+	err = sendNotification(post.UserID, "Your post "+strconv.Itoa(int(post.PostID))+" has been reported.")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// respond
+	c.JSON(http.StatusOK, gin.H{})
+}
