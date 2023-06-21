@@ -7,13 +7,14 @@ services:
     environment:
       - POSTGRES_PASSWORD=${LOGIN_DB}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U mavowpjc -h mel.db.elephantsql.com -d mavowpjc"]
+      test: [ "CMD-SHELL", "pg_isready -U mavowpjc -h mel.db.elephantsql.com -d mavowpjc" ]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  api:
+  api_server:
     container_name: api_server
+    restart: unless-stopped
     ports:
       - "3000:3000"
     env_file: .env
@@ -33,9 +34,12 @@ services:
       - "443:443"
     volumes:
       - /home/flo/containers/caddyCaddyfile:/etc/caddy/Caddyfile
+      - /home/flo/containers/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
 
     networks:
-          - caddy
+      - caddy
 
 volumes:
   caddy_data:
