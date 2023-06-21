@@ -22,6 +22,7 @@ func Routes(router *gin.Engine) {
 
 	router.GET("/user", middleware.RequireAuth, controllers.User)
 	router.POST("/user", middleware.RequireAuth, controllers.SendUsername, controllers.UploadProfileImg)
+	router.POST("/ignore-notification", middleware.RequireAuth, controllers.IgnoreNotification)
 
 	router.GET("/login", func(c *gin.Context) { c.HTML(http.StatusOK, "login.html", nil) })
 	router.POST("/login", controllers.Login)

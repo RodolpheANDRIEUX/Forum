@@ -14,7 +14,8 @@
             <label for="username">Username:</label>
             <input class="profile_input" type="text" id="username" name="username">
             <label for="username">Profile Image:</label>
-            <input class="profile_input" type="file" name="profile-img" accept=".jpg,.jpeg,.png,.gif" onchange="showPreview(event)">
+            <input class="profile_input" type="file" name="profile-img" accept=".jpg,.jpeg,.png,.gif"
+                   onchange="showPreview(event)">
 
             <div class="profile_image">
                 <img id="img-preview">
@@ -27,6 +28,16 @@
     <div class="content_container">
         <section class="notifications">
             <h4 class="section_header">Notifications:</h4>
+            <div class="notifications_container">
+                {{ range .notifs }}
+                <div id="notification_{{ .NotificationID }}" class="notification_item">
+                    <p>{{ .Message }}</p>
+                    <p>{{ .FormatDateNotif }}</p>
+                    <button id="delete_notification_{{ .NotificationID }}" onclick="deleteNotification({{ .NotificationID }})">X
+                    </button>
+                </div>
+                {{end}}
+            </div>
         </section>
 
         <section class="post_section">
@@ -34,6 +45,7 @@
             {{range .posts}}
             <div class="post">
                 <p>{{.Message}}</p>
+                <p>#{{ .PostID }}</p>
                 {{ if .Picture }}
                 <img class="image_post" src="data:image/jpeg;base64,{{.EncodedImage}}" alt="{{.PostID}}_post_img">
                 {{ end }}

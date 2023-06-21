@@ -1,4 +1,4 @@
-FROM alpine:latest as builder
+FROM golang:alpine as builder
 RUN apk add --no-cache git
 RUN apk add --no-cache go
 WORKDIR /app

@@ -120,3 +120,28 @@ function showPreview(event){
         preview.style.display = "block";
     }
 }
+
+async function deleteNotification(id){
+    const btn = document.getElementById(`delete_notification_${id}`)
+    btn.disabled = true;
+
+    await fetch("/ignore-notification", {
+        method : "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'notificationID': id,
+        }),
+    }).then(async response => {
+        if (response.ok) {
+            const notifDiv = btn.parentNode;
+            notifDiv.remove();
+        } else {
+            const data = response.json();
+            displayError(data.error);
+            btn.disabled = false;
+            console.log(data.error);
+        }
+    }).catch(e => {console.log('error:',e)})
+}
