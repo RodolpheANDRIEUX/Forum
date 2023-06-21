@@ -104,9 +104,23 @@ func User(c *gin.Context) {
 		return
 	}
 
+	// get the posts
 	var posts []models.Post
-	initializer.DB.Where("user_id = ?", user.UserID).Find(&posts)
-	c.HTML(http.StatusOK, "user.html", gin.H{"posts": posts})
+	err = initializer.DB.Where("user_id = ?", user.UserID).Find(&posts).Error
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	// get the notifications
+	var notifs []models.Notifications
+	err = initializer.DB.Where("user_id = ? AND deleted = ?", user.UserID, false).Find(&notifs).Error
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.HTML(http.StatusOK, "user.html", gin.H{"posts": posts, "notifs": notifs})
 }
 
 func Logout(c *gin.Context) {

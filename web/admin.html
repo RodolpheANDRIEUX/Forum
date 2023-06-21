@@ -37,7 +37,7 @@
                             <select name="role" id="role-{{ .UserID }}" {{ if ne $adminRole "administrator" }}disabled{{ end }}>
                             <option value="moderator" {{ if eq .Role "moderator" }} selected {{ end }}>Moderator</option>
                             <option value="member" {{ if eq .Role "member" }} selected {{ end }} >Member</option>
-                            <option value="member" {{ if eq .Role "banned" }} selected {{ end }} >Banned</option>
+                            <option value="banned" {{ if eq .Role "banned" }} selected {{ end }} >Banned</option>
                             </select>
                         </p>
                     </form>

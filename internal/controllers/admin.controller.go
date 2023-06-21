@@ -45,19 +45,15 @@ func UpdateUser(c *gin.Context) {
 	}
 
 	var body Body
-	if err := c.ShouldBindJSON(&body); err != nil {
+	err := c.ShouldBindJSON(&body)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 
-	var user models.User
-	initializer.DB.First(&user, body.UserID)
-	user.Username = body.Username
-	user.Role = body.Role
-
-	result := initializer.DB.Save(&user)
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error})
+	err = utils.UpdateUser(body.UserID, body.Username, body.Role)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 
@@ -116,7 +112,7 @@ func IgnoreReport(c *gin.Context) {
 	}
 
 	// un-report the post
-	err = utils.UpdatePost(body.PostID, post.Message, false, 0)
+	err = utils.UpdatePost(body.PostID, post.Message, false, uint(0))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
@@ -156,6 +152,10 @@ func BanUser(c *gin.Context) {
 
 	// ban the user
 	err = utils.UpdateUser(body.UserID, utils.CreateUniqueUsername(user.Email), "banned")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
 
 	// respond
 	c.JSON(http.StatusOK, gin.H{"error": "User banned"})

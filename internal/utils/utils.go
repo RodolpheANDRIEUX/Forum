@@ -135,23 +135,35 @@ func GetAllUsersExceptAdmins() ([]models.User, error) {
 }
 
 func UpdateUser(userID uint, username string, role string) error {
-	result := initializer.DB.Model(&models.User{}).Where("user_id = ?", userID).Updates(models.User{Username: username, Role: role})
-	return result.Error
+	err := initializer.DB.Model(&models.User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+		"Username": username,
+		"Role":     role,
+	}).Error
+	return err
 }
 
 func UpdatePost(postID uint, message string, deleted bool, reported uint) error {
-	result := initializer.DB.Model(&models.Post{}).Where("post_id = ?", postID).Updates(models.Post{Message: message, Deleted: deleted, Report: reported})
-	return result.Error
+	err := initializer.DB.Model(&models.Post{}).Where("post_id = ?", postID).Updates(map[string]interface{}{
+		"Message": message,
+		"Deleted": deleted,
+		"Report":  reported,
+	}).Error
+
+	return err
 }
 
 func GetPost(postID uint) (models.Post, error) {
 	var post models.Post
 
-	err := initializer.DB.First(&post, postID)
+	err := initializer.DB.Preload("User").First(&post, postID)
 
-	if err != nil {
-		return post, err.Error
-	}
+	return post, err.Error
+}
 
-	return post, nil
+func GetNotification(notificationID uint) (models.Notifications, error) {
+	var notification models.Notifications
+
+	err := initializer.DB.Preload("User").First(&notification, notificationID)
+
+	return notification, err.Error
 }
