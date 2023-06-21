@@ -24,7 +24,7 @@ func IncrementLikes(c *gin.Context) {
 
 	// Retrieve the post from the database.
 	var post models.Post
-	if err := initializer.DB.Where("post_id = ?", postID).First(&post).Error; err != nil {
+	if err := initializer.DB.Preload("User").Where("post_id = ?", postID).First(&post).Error; err != nil {
 		Log.Err.Println("Error retrieving post from the database:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Error retrieving post from the database",
