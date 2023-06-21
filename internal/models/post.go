@@ -15,6 +15,7 @@ type Post struct {
 	Message   string
 	Picture   []byte
 	Topic     string
+	Replies   []Reply
 	Like      int  `json:"Like"`    // provisoire
 	Comment   int  `json:"Comment"` // provisoire
 	Report    uint `gorm:"default:0"`

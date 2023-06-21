@@ -1,4 +1,6 @@
 version: "3"
+networks:
+  caddy:
 services:
   db:
     image: postgres:latest
@@ -13,19 +15,24 @@ services:
   api:
     container_name: api_server
     ports:
-      - ${PORT}:${PORT}
+      - "3000:3000"
     env_file: .env
     depends_on:
       - db
     build: .
 
   caddy:
-    image: caddy:2-alpine
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+    image: caddy:latest
+    restart: unless-stopped
+    container_name: caddy
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
 
 volumes:
+  caddy_data:
+    external: true
+  caddy_config:
   postgres_data:

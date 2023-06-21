@@ -29,6 +29,9 @@ func Routes(router *gin.Engine) {
 
 	router.GET("/getUser", controllers.SendProfileData)
 
+	router.GET("/post", controllers.UniquePost)
+	router.POST("/reply", controllers.Reply)
+
 	// admin
 	router.GET("/admin", middleware.RequireAdmin, controllers.Admin)
 	router.POST("/update-user", middleware.RequireAdmin, controllers.UpdateUser)
