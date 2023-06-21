@@ -1,48 +1,24 @@
 version: "3"
-networks:
-  caddy:
 services:
   db:
     image: postgres:latest
     environment:
       - POSTGRES_PASSWORD=${LOGIN_DB}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U mavowpjc -h mel.db.elephantsql.com -d mavowpjc" ]
+      test: ["CMD-SHELL", "pg_isready -U mavowpjc -h mel.db.elephantsql.com -d mavowpjc"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  api_server:
+  api:
     container_name: api_server
-    restart: unless-stopped
     ports:
       - "3000:3000"
     env_file: .env
+
     depends_on:
       - db
     build: .
-    networks:
-      - caddy
-
-
-  caddy:
-    image: caddy:latest
-    restart: unless-stopped
-    container_name: caddy
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /home/flo/containers/caddyCaddyfile:/etc/caddy/Caddyfile
-      - /home/flo/containers/site:/srv
-      - caddy_data:/data
-      - caddy_config:/config
-
-    networks:
-      - caddy
 
 volumes:
-  caddy_data:
-    external: true
-  caddy_config:
   postgres_data:
