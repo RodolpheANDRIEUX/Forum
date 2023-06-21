@@ -5,14 +5,15 @@ import (
 )
 
 type User struct {
-	UserID     uint `gorm:"primaryKey;unique"`
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	Role       string
-	Username   string `gorm:"unique"`
-	Email      string `gorm:"unique"`
-	ProfileImg []byte
-	Password   string
+	UserID        uint `gorm:"primaryKey;unique"`
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	Role          string
+	Username      string `gorm:"unique"`
+	Email         string `gorm:"unique"`
+	ProfileImg    []byte
+	Password      string
+	Notifications []Notifications `gorm:"foreignKey:UserID"`
 }
 
 func (p User) FormattedDate() string {
