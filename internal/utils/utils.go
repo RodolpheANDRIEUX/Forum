@@ -26,6 +26,7 @@ func HasPassword(password string) ([]byte, error) {
 	return hash, err
 }
 
+// ParseUser : get the user using JWT
 func ParseUser(c *gin.Context) (models.User, error) {
 	var user = models.User{}
 	tokenString, err := c.Cookie("Authorization")
@@ -155,6 +156,12 @@ func GetPost(postID uint) (models.Post, error) {
 	var post models.Post
 
 	err := initializer.DB.Preload("User").First(&post, postID)
+
+	var replies []models.Reply
+
+	err = initializer.DB.Where("post_id != ?", post.PostID).Find(&replies)
+
+	post.Replies = replies
 
 	return post, err.Error
 }
