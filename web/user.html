@@ -45,6 +45,7 @@
             {{range .posts}}
             <div class="post">
                 <p>{{.Message}}</p>
+                <p>#{{ .PostID }}</p>
                 {{ if .Picture }}
                 <img class="image_post" src="data:image/jpeg;base64,{{.EncodedImage}}" alt="{{.PostID}}_post_img">
                 {{ end }}

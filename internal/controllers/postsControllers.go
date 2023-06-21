@@ -4,6 +4,7 @@ import (
 	"forum/Log"
 	"forum/internal/initializer"
 	"forum/internal/models"
+	"forum/internal/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -37,6 +38,26 @@ func IncrementLikes(c *gin.Context) {
 		Log.Err.Println("Error saving updated post to the database:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Error saving updated post to the database",
+		})
+		return
+	}
+
+	// send a notifications
+	user, err := utils.ParseUser(c)
+	if err != nil {
+		Log.Err.Println("Error parsing the user JWT", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Error parsing the user JWT",
+		})
+		return
+	}
+
+	message := user.Username + " liked your post #" + strconv.Itoa(int(post.PostID))
+	err = sendNotification(post.UserID, message)
+	if err != nil {
+		Log.Err.Println("Error sending a notification", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Error sending a notification",
 		})
 		return
 	}

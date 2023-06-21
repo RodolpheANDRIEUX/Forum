@@ -28,7 +28,6 @@ func HasPassword(password string) ([]byte, error) {
 
 func ParseUser(c *gin.Context) (models.User, error) {
 	var user = models.User{}
-
 	tokenString, err := c.Cookie("Authorization")
 
 	if err != nil {
