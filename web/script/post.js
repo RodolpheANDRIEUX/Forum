@@ -28,30 +28,61 @@ ws.onmessage = function(event) {
     messages.appendChild(messageDiv)
 };
 
+const messageInput = document.getElementById('messageInput');
+
+messageInput.addEventListener('keyup', function(event) {
+    if (event.keyCode === 13) { // 'Enter'
+        event.preventDefault();
+        document.getElementById('sendButton').click();
+    }
+});
+
 document.getElementById('sendButton').onclick = function() {
-    const messageInput = document.getElementById('messageInput');
+    const messageInput = document.getElementById('messageInput').value.trim();
     const fileInput = document.getElementById('postImg');
     const file = fileInput.files[0];
 
-    // If no file is selected, send only the message
-    if (!file) {
-        ws.send(messageInput.value);
-        messageInput.value = '';
+    if (!messageInput && !file) {
+        console.log('Both message and file are empty. Nothing to send.');
         return;
     }
 
-    // If there is a file, read it into memory and send it
+    if (!file) {
+        ws.send(messageInput);
+        document.getElementById('messageInput').value = '';
+        return;
+    }
+
     const reader = new FileReader();
     reader.onload = function(event) {
         const base64File = event.target.result.split(',')[1];
         const payload = JSON.stringify({
-            message: messageInput.value,
+            message: messageInput,
             file: base64File
         });
         ws.send(payload);
-        messageInput.value = '';
+        document.getElementById('messageInput').value = '';
         fileInput.value = '';
+        const preview = document.getElementById('preview');
+        const imagePreview = document.getElementById('image-preview');
+        preview.src = '';
+        imagePreview.style.display = 'none';
     };
     reader.readAsDataURL(file);
 };
 
+document.getElementById('postImg').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('preview');
+            const imagePreview = document.getElementById('image-preview');
+            preview.src = e.target.result;
+            imagePreview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    } else {
+        document.getElementById('image-preview').style.display = 'none';
+    }
+});

@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Forum</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300&family=Source+Serif+4:wght@300;400&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./css/page.css">
   <link rel="stylesheet" type="text/css" href="./css/post.css">
 </head>
@@ -45,11 +48,22 @@
     <div id="feed">
 
       <section id="new-post">
-        <form action="/post">
-        </form>
-        <iframe src="http://localhost:3000/home" width="800" height="600"></iframe>
-      </section>
+        <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
 
+        <div id="buttons">
+          <input type="file" id="postImg" accept=".jpg,.jpeg,.png,.gif" name="postImg" style="display: none;">
+          <label class="btn" for="postImg">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+          </label>
+
+          <button id="sendButton" class="btn"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div id="image-preview" style="display: none;">
+          <img id="preview" src="" alt="Image preview"/>
+        </div>
+
+      </section>
 
 <!--      <section id="filters">-->
 <!--      </section>-->
@@ -66,14 +80,16 @@
           <img src="" alt="" class="post-image">
         </div>
         <footer>
-          <div class="post-reactions">
-            <i class="fa-regular fa-heart fa-shake fa-2xl"></i>
-            <i class="fa-regular fa-comment fa-2xl"></i>
-            <i class="fa-solid fa-share-nodes fa-2xl"></i>
+          <div class="icon-wrapper">
+            <i class="fa-solid fa-heart fa-shake fa-2xl"></i>
+            <div class="icon-text likes">0</div>
           </div>
-          <div class="reactions-numbers">
-            <span class="likes">0</span>
-            <span class="comments">0</span>
+          <div class="icon-wrapper">
+            <i class="fa-regular fa-comment fa-2xl"></i>
+            <div class="icon-text comments">0</div>
+          </div>
+          <div class="icon-wrapper">
+            <i class="fa-solid fa-share-nodes fa-2xl"></i>
           </div>
         </footer>
       </article>
@@ -101,5 +117,6 @@
 <!--</footer>-->
 
 <script src="./script/page.js"></script>
+<script src="./script/post.js"></script>
 </body>
 </html>
