@@ -13,9 +13,9 @@ func InitRoutes(router *gin.Engine) {
 }
 
 func Routes(router *gin.Engine) {
-	router.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", nil) })
+	//router.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", nil) })
 
-	router.GET("/page", func(c *gin.Context) { c.HTML(http.StatusOK, "page.html", nil) })
+	router.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "page.html", nil) })
 
 	router.GET("/signup", func(c *gin.Context) { c.HTML(http.StatusOK, "signup.html", nil) })
 	router.POST("/signup", controllers.Signup)

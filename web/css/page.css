@@ -49,6 +49,24 @@ body {
     position: relative;
     height: 63px;
     backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#login_btn{
+    padding: 5px 10px;
+    box-shadow: inset 0 0 10px #D8F3DC, 0 0 10px #D8F3DC;
+    font-weight: 600;
+    background: #D8F3DC;
+    font-size: 16px;
+    margin-right: 20px;
+    border: 3px solid #D8F3DC;
+}
+
+#login_btn:hover{
+    box-shadow: inset 0 0 10px #F3D8EF, 0 0 10px #F3D8EF;
+    background: #F3D8EF;
 }
 
 #header-border {
@@ -215,4 +233,117 @@ body {
 
 footer {
     grid-column: 1 / -1;
+}
+
+
+/* LOGIN MODAL */
+.login_container{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(12px);
+    z-index: 1000;
+    color: white;
+    font-family: "police", sans-serif;
+}
+
+.tab-content h2{
+    text-align: center;
+}
+
+.auth_form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.auth_form_submit{
+    padding: 5px 10px;
+    box-shadow: inset 0 0 10px #D8F3DC, 0 0 10px #D8F3DC;
+    font-weight: 600;
+    background: #D8F3DC;
+    font-size: 16px;
+    margin-top: 10px;
+    border: 3px solid #D8F3DC;
+}
+
+.oauth_btn{
+    border-top: 1px solid #D8F3DC;
+}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    box-shadow: inset 0 0 10px #D8F3DC, 0 0 10px #D8F3DC;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: transparent;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    width: 50%;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #183629;
+    color: white;
+}
+
+/* Style the tab content */
+.tab-content {
+    display: none;
+    padding: 10px 20px;
+    box-shadow: inset 0 0 10px #D8F3DC, 0 0 10px #D8F3DC;
+    border-top: none;
+}
+
+/* Login btns */
+.btn-auth {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: "police", sans-serif;
+    margin: 15px 0 10px 0;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.3s;
+}
+
+.google-btn {
+    background-color: #dc4e41;
+}
+
+.google-btn:hover {
+    background-color: #c74438;
+}
+
+.github-btn {
+    background-color: #333;
+}
+
+.github-btn:hover {
+    background-color: #292828;
+}
+
+.fab {
+    font-size: 20px;
 }
