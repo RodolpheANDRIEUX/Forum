@@ -20,6 +20,9 @@ services:
     depends_on:
       - db
     build: .
+    networks:
+      - caddy
+
 
   caddy:
     image: caddy:latest
@@ -29,7 +32,10 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - /home/flo/containers/caddyCaddyfile:/etc/caddy/Caddyfile
+
+    networks:
+          - caddy
 
 volumes:
   caddy_data:
