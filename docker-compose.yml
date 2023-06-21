@@ -15,10 +15,17 @@ services:
     ports:
       - ${PORT}:${PORT}
     env_file: .env
-
     depends_on:
       - db
     build: .
+
+  caddy:
+    image: caddy:2-alpine
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - "80:80"
+      - "443:443"
 
 volumes:
   postgres_data:
