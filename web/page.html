@@ -78,7 +78,12 @@
   </div>
 </div>
 
-
+<div id="overlay_reply"></div>
+<div class="reply_modal" id="reply_modal">
+  <input type="text" id="reply_input" placeholder="Type a message...">
+  <input type="file" id="post_img" accept=".jpg,.jpeg,.png,.gif" name="postImg">
+  <button id="send_reply">Send</button>
+</div>
 
 <header id="page-header">
   <img id="header-logo" src="img/HeaderLogo.png" alt="Forum">
@@ -157,7 +162,7 @@
             <div class="icon-text comments">0</div>
           </div>
           <div class="icon-wrapper">
-            <i class="fa-solid fa-share-nodes fa-2xl"></i>
+            <a onclick="reply(event)"><i class="fa-solid fa-share-nodes fa-2xl"></i></a>
           </div>
           <div class="icon-wrapper report">
             <a onclick="reportPost(event)">Report</a>

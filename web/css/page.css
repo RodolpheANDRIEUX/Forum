@@ -237,7 +237,7 @@ footer {
 
 
 /* LOGIN MODAL */
-#overlay_login{
+#overlay_login, #overlay_reply{
     display: none;
     background-color: black;
     opacity: 0.8;
@@ -379,4 +379,16 @@ footer {
 
 #message.show {
     opacity: 1;
+}
+
+.reply_modal{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(12px);
+    z-index: 1000;
+    color: white;
+    font-family: "police", sans-serif;
 }

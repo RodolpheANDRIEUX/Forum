@@ -165,3 +165,13 @@ async function reportPost(event) {
         console.error('Error:', error);
     }
 }
+
+const replyModal = document.getElementById("reply_modal")
+const overlayReply = document.getElementById("overlay_reply")
+
+function reply(event){
+    let article = event.target.closest('article');
+    let postId = article.getAttribute('data-post-id');
+    replyModal.style.display = "block"
+    overlayReply.style.display = "block"
+}
