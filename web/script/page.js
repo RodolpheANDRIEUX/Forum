@@ -119,3 +119,17 @@ function openCity(evt, cityName) {
 
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
+
+
+const overlay = document.getElementById("overlay_login");
+const loginContainer = document.getElementById("login_container");
+
+document.getElementById("login_btn").addEventListener("click", ev => {
+    loginContainer.style.display = "block"
+    overlay.style.display = "block";
+})
+
+overlay.addEventListener("click", ev => {
+    loginContainer.style.display = "none"
+    overlay.style.display = "none"
+})
