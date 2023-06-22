@@ -19,14 +19,14 @@ func Signup(c *gin.Context) {
 	var body Body
 	// Get the username/email/password
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.HTML(http.StatusInternalServerError, "signup.html", gin.H{"error": err})
+		c.HTML(http.StatusInternalServerError, "page.html", gin.H{"error": err})
 		return
 	}
 
 	err, code := SignupAndStore(c, body)
 
 	if err != nil {
-		c.HTML(code, "signup.html", gin.H{"error": err})
+		c.HTML(code, "page.html", gin.H{"error": err})
 	}
 
 	// redirect to the configuration of the account
@@ -83,14 +83,14 @@ func Login(c *gin.Context) {
 	var body Body
 
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": err})
+		c.HTML(http.StatusInternalServerError, "page.html", gin.H{"error": err})
 		return
 	}
 
 	message, errorCode := Authorize(c, body)
 
 	if errorCode != http.StatusOK {
-		c.HTML(errorCode, "login.html", gin.H{"error": message})
+		c.HTML(errorCode, "page.html", gin.H{"error": message})
 	}
 
 	c.Redirect(http.StatusFound, "/user")
