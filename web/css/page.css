@@ -392,3 +392,8 @@ footer {
     color: white;
     font-family: "police", sans-serif;
 }
+
+.btn:disabled{
+    background-color: #D8F3DC60;
+    cursor: not-allowed;
+}

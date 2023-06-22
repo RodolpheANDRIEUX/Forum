@@ -175,3 +175,33 @@ function reply(event){
     replyModal.style.display = "block"
     overlayReply.style.display = "block"
 }
+
+document.addEventListener('DOMContentLoaded', async ev => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    await fetch("/validate_auth", {
+        method: "GET",
+    }).then(async response => {
+        if (response.ok) {
+            const btnDiv = document.getElementById('login_signup');
+            const loginBtn = document.getElementById('login_btn');
+            loginBtn.remove();
+            console.log('logged')
+        } else {
+            console.log('not logged')
+            disableInputs();
+        }
+    }).catch(e => {console.log('error:',e)})
+})
+
+function disableInputs(){
+    const btnToDisable = document.querySelectorAll('.needAuth');
+    btnToDisable.forEach(btn => {
+        btn.disabled=true;
+        btn.title = "Please login to get access to this function"
+    })
+    const reports = document.querySelectorAll('a.needAuth');
+    reports.forEach(link=>{
+        link.style.color="#D8F3DC60";
+        link.style.cursor="not-allowed"
+    })
+}

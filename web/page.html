@@ -87,7 +87,7 @@
 
 <header id="page-header">
   <img id="header-logo" src="img/HeaderLogo.png" alt="Forum">
-  <div class="login_signup">
+  <div id='login_signup' class="login_signup">
     <button id="login_btn">LOGIN</button>
   </div>
   <div id="header-border"></div>
@@ -129,7 +129,7 @@
             <i class="fa-solid fa-arrow-up-from-bracket"></i>
           </label>
 
-          <button id="sendButton" class="btn"><i class="fa-solid fa-arrow-right"></i></button>
+          <button id="sendButton" class="btn needAuth"><i class="fa-solid fa-arrow-right"></i></button>
         </div>
 
         <div id="image-preview" style="display: none;">
@@ -154,18 +154,18 @@
         </div>
         <footer>
           <div class="icon-wrapper">
-            <i class="fa-solid fa-heart fa-shake fa-2xl"></i>
+            <i class="fa-solid fa-heart fa-shake fa-2xl needAuth"></i>
             <div class="icon-text likes">0</div>
           </div>
           <div class="icon-wrapper">
-            <i class="fa-regular fa-comment fa-2xl"></i>
+            <i class="fa-regular fa-comment fa-2xl needAuth"></i>
             <div class="icon-text comments">0</div>
           </div>
           <div class="icon-wrapper">
             <a onclick="reply(event)"><i class="fa-solid fa-share-nodes fa-2xl"></i></a>
           </div>
           <div class="icon-wrapper report">
-            <a onclick="reportPost(event)">Report</a>
+            <a class="needAuth" onclick="reportPost(event)">Report</a>
           </div>
         </footer>
       </article>
