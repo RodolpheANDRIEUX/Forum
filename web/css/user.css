@@ -3,6 +3,9 @@ body {
     width: 100vw;
     height: 100vh;
     overflow-x: hidden;
+    background-image: url('https://i.imgur.com/yA95dHn.png');
+    font-family: "police", sans-serif;
+    color: white;
 }
 
 /*.profile_image {
@@ -52,8 +55,10 @@ body {
 }
 
 .notifications, .post_section {
-    border: 1px solid black;
+    border: 3px solid #D8F3DC;
+    box-shadow: inset 0 0 6px 1px #D8F3DC;
     padding: 10px;
+    backdrop-filter: blur(12px);
 }
 
 .section_header {
@@ -65,7 +70,9 @@ body {
     display: flex;
     padding: 10px;
     flex-direction: column;
-    border: 1px solid black;
+    border: 3px solid #D8F3DC;
+    box-shadow: inset 0 0 6px 1px #D8F3DC;
+    backdrop-filter: blur(12px);
 }
 
 #user_section {
@@ -73,7 +80,7 @@ body {
 }
 
 .profile_info {
-    background: #ADE5C8FF;
+    background: rgba(0, 0, 0, 0.75);
     padding: 15px;
     border-radius: 5px;
     display: flex;
@@ -92,7 +99,7 @@ body {
     width: 500px;
     height: 300px;
     z-index: 100;
-    background-color: white;
+    backdrop-filter: blur(12px);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -131,11 +138,12 @@ body {
 }
 
 .post {
-    border: 1px solid black;
     padding: 10px;
     margin-bottom: 10px;
-    background: #ADE5C8FF;
+    backdrop-filter: blur(12px);
     border-radius: 5px;
+    border: 3px solid #D8F3DC;
+    box-shadow: inset 0 0 6px 1px #D8F3DC;
 }
 
 .post p {
@@ -150,4 +158,55 @@ body {
 
 .username{
 
+}
+
+.shiny_pink{
+    margin: 0 0 10px;
+    font-size: 26px;
+    color: #ffffff;
+    text-shadow: 0 0 10px #F3D8EF;
+}
+
+.submit_modifications, .ignore_report{
+    background: #fff;
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    transition: all 0.2s ease-out;
+}
+
+.submit_modifications:hover{
+    background: #F3D8EF;
+}
+
+.logout{
+    background: #ff0000;
+    color: inherit;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    transition: all 0.2s ease-out;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.notification_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: white 1px solid;
+    border-radius: 5px;
+    padding: 0 10px;
+    margin-top: 5px;
+}
+
+.notifications_txt p{
+    margin: 3px 0;
 }
