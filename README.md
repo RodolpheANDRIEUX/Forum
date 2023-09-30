@@ -3,8 +3,6 @@
 ![tech](https://cdn.discordapp.com/attachments/399312290333327360/1157681428037898331/image.png?ex=65197e59&is=65182cd9&hm=e8630c397c40aee05680b692208667228ad25f0d44596e9553339626411d9739&)
 ![dashdoard](https://cdn.discordapp.com/attachments/399312290333327360/1157681363131043971/image.png?ex=65197e49&is=65182cc9&hm=cde0a53b367bef5433c6c25e5321e86aac453cecd5206f2b0f5337627aebdb74&)
 
-Briefly introduce your project and provide a high-level overview of its purpose and features.
-
 ## Table of Contents
 
 - [Installation](#installation)
