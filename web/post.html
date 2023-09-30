@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>titre</title>
+    <link rel="stylesheet" type="text/css" href="/css/page.css">
+    <link rel="stylesheet" type="text/css" href="/css/post.css">
+    <link rel="stylesheet" type="text/css" href="/css/postPage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<header id="page-header">
+    <img id="header-logo" src="/img/HeaderLogo.png" alt="Forum">
+    <div id="header-border"></div>
+</header>
+
+<main class="container">
+
+    <aside class="sidebar-left">
+        <img id="main-logo" src="/img/HeaderLogo.png" alt="Forum Logo">
+        <nav>
+            <ul>
+                <li><img src="/img/icon/discover.png" alt="Discover"><a href="#"><span>D</span>iscover</a></li>
+                <li><img src="/img/icon/message.png" alt="Profile"><a href="#"><span>P</span>rofile</a></li>
+                <li><img src="/img/icon/profile.png" alt="Message"><a href="#"><span>M</span>essage</a></li>
+                <li><img src="/img/icon/settings.png" alt="Settings"><a href="#"><span>S</span>ettings</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <section class="main-content">
+        <div id="background"></div>
+
+        <div id="feed">
+            <article class="post" data-post-id="">
+                <header>
+                    <img src="" alt="profile pic" class="profile-pic">
+                    <span class="post-author"></span>
+                    <span class="open-dialog">...</span>
+                </header>
+                <div class="post-body">
+                    <p class="post-content"></p>
+                    <img src="" alt="" class="post-image">
+                </div>
+                <footer>
+                    <div class="icon-wrapper">
+                        <i class="fa-solid fa-heart fa-shake fa-2xl"></i>
+                        <div class="icon-text likes">0</div>
+                    </div>
+                    <div class="icon-wrapper">
+                        <i class="fa-regular fa-comment fa-2xl"></i>
+                        <div class="icon-text comments">0</div>
+                    </div>
+                    <div class="icon-wrapper">
+                        <i class="fa-solid fa-share-nodes fa-2xl"></i>
+                    </div>
+                </footer>
+            </article>
+
+        </div>
+
+
+
+
+        <section id="new-reply">
+            <input type="text" id="replyInput" placeholder="Reply..." autocomplete="off">
+
+            <div id="buttons">
+                <input type="file" id="replyImg" accept=".jpg,.jpeg,.png,.gif" name="postImg" style="display: none;">
+                <label class="btn" for="replyImg">
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                </label>
+
+                <button id="sendButton" class="btn"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <div id="image-preview" style="display: none;">
+                <img id="preview" src="" alt="Image preview"/>
+            </div>
+
+        </section>
+    </section>
+
+
+    <aside class="sidebar-right">
+        <h2 class="shiny"><span>S</span>uggestions for you</h2>
+        <ul>
+            <!-- new contact suggestions -->
+            <li class="shiny">...</li>
+        </ul>
+    </aside>
+
+</main>
+
+<footer>
+    <p>© 2023 Forum</p>
+</footer>
+
+</body>
+</html>

@@ -43,6 +43,12 @@ function handleFeedClick(event) {
             console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
         }
     }
+
+    // Handle post body click
+    if (event.target.matches('.post-body') || event.target.closest('.post-body')) {
+        const postId = event.target.closest('.post').dataset.postId;
+        window.location.href = '/post-page/' + postId;
+    }
 }
 
 async function fetchPostsAndDisplayInFeed(page) {

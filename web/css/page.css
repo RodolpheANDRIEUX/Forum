@@ -112,8 +112,6 @@ body {
     position: relative;
     grid-column: 2 / 3;
     /*border: dashed blue 2px;*/
-    /*height: 3000px;*/
-    display: flex;
     justify-content: center;
 }
 
@@ -152,6 +150,7 @@ body {
     padding: 10px;
     margin: 10px 0 10px 0;
     backdrop-filter: blur(4px);
+    color: #D8F3DC;
     box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 

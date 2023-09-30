@@ -47,6 +47,7 @@ func Routes(router *gin.Engine) {
 	router.GET("/logout", controllers.Logout)
 
 	router.GET("/showPost", controllers.DisplayPost)
+	router.GET("/post-page/:postId", controllers.ShowPostPage)
 	router.POST("/incrementLikes/:postId", controllers.IncrementLikes)
 
 	router.GET("/validate_admin", middleware.RequireAdmin)
