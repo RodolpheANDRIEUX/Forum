@@ -37,7 +37,7 @@ func HandleGoogleCallback(c *gin.Context) {
 
 	data, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		c.HTML(http.StatusInternalServerError, "signup.html", gin.H{"error": "Failed to read response body"})
+		c.HTML(http.StatusInternalServerError, "page.html", gin.H{"error": "Failed to read response body"})
 		return
 	}
 	// Parse user information
@@ -45,7 +45,7 @@ func HandleGoogleCallback(c *gin.Context) {
 
 	err = json.Unmarshal(data, &body)
 	if err != nil {
-		c.HTML(http.StatusInternalServerError, "signup.html", gin.H{"error": "Failed to parse user info"})
+		c.HTML(http.StatusInternalServerError, "page.html", gin.H{"error": "Failed to parse user info"})
 		return
 	}
 
@@ -56,21 +56,21 @@ func HandleGoogleCallback(c *gin.Context) {
 		message, errorCode := Authorize(c, body)
 
 		if errorCode != http.StatusOK {
-			c.HTML(errorCode, "login.html", gin.H{"error": message})
+			c.HTML(errorCode, "page.html", gin.H{"error": message})
 			return
 		}
 		// Respond
-		c.Redirect(http.StatusFound, "/user")
+		c.Redirect(http.StatusFound, "/")
 	} else {
 		// if register
 		dbErr, errorCode := SignupAndStore(c, body)
 
 		if errorCode != http.StatusOK {
-			c.HTML(errorCode, "signup.html", gin.H{"error": dbErr})
+			c.HTML(errorCode, "page.html", gin.H{"error": dbErr})
 			return
 		}
 		// redirect to the configuration of the account
-		c.Redirect(http.StatusFound, "/user")
+		c.Redirect(http.StatusFound, "/")
 		return
 	}
 }

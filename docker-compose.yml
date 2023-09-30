@@ -13,19 +13,12 @@ services:
   api:
     container_name: api_server
     ports:
-      - ${PORT}:${PORT}
+      - "3000:3000"
     env_file: .env
+
     depends_on:
       - db
     build: .
-
-  caddy:
-    image: caddy:2-alpine
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-    ports:
-      - "80:80"
-      - "443:443"
 
 volumes:
   postgres_data:

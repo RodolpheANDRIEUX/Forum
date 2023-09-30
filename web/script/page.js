@@ -107,3 +107,107 @@ async function incrementLikes(postId) {
         console.error('Error:', error);
     }
 }
+
+
+function openTab(evt, tabName) {
+    let i, tabContent, tablinks;
+    tabContent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tab-links");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
+
+const overlay = document.getElementById("overlay_login");
+const loginContainer = document.getElementById("login_container");
+
+document.getElementById("login_btn").addEventListener("click", ev => {
+    loginContainer.style.display = "block"
+    overlay.style.display = "block";
+})
+
+overlay.addEventListener("click", ev => {
+    loginContainer.style.display = "none"
+    overlay.style.display = "none"
+})
+
+async function reportPost(event) {
+    let article = event.target.closest('article');
+    let postId = article.getAttribute('data-post-id');
+    try {
+        const response = await fetch('/report', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'postId':postId })
+        });
+
+        if (response.ok){
+            if (response.ok) {
+                const messageElement = document.getElementById('message');
+                messageElement.textContent = 'Post reported successfully';
+                messageElement.classList.add('show');
+
+                setTimeout(() => {
+                    messageElement.textContent = '';
+                    messageElement.classList.remove('show');
+                }, 3000);
+            }
+        } else {
+            const data = await response.json();
+            console.log(data.error)
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+const replyModal = document.getElementById("reply_modal")
+const overlayReply = document.getElementById("overlay_reply")
+
+function reply(event){
+    let article = event.target.closest('article');
+    let postId = article.getAttribute('data-post-id');
+    replyModal.style.display = "block"
+    overlayReply.style.display = "block"
+}
+
+document.addEventListener('DOMContentLoaded', async ev => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    await fetch("/validate_auth", {
+        method: "GET",
+    }).then(async response => {
+        if (response.ok) {
+            const btnDiv = document.getElementById('login_signup');
+            const loginBtn = document.getElementById('login_btn');
+            loginBtn.remove();
+            console.log('logged')
+        } else {
+            console.log('not logged')
+            disableInputs();
+        }
+    }).catch(e => {console.log('error:',e)})
+})
+
+function disableInputs(){
+    const btnToDisable = document.querySelectorAll('.needAuth');
+    btnToDisable.forEach(btn => {
+        btn.disabled=true;
+        btn.title = "Please login to get access to this function"
+    })
+    const reports = document.querySelectorAll('a.needAuth');
+    reports.forEach(link=>{
+        link.style.color="#D8F3DC60";
+        link.style.cursor="not-allowed"
+    })
+}

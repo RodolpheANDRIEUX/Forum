@@ -8,10 +8,7 @@ type Reply struct {
 	UpdatedAt time.Time
 	PostID    uint
 	UserID    uint
+	User      User
 	Message   string
-	Picture   string
-
-	User       User        `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Post       Post        `gorm:"foreignKey:PostID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	ReplyLikes []ReplyLike `gorm:"foreignKey:ReplyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Picture   []byte
 }

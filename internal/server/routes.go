@@ -13,9 +13,9 @@ func InitRoutes(router *gin.Engine) {
 }
 
 func Routes(router *gin.Engine) {
-	router.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", nil) })
+	//router.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "index.html", nil) })
 
-	router.GET("/page", func(c *gin.Context) { c.HTML(http.StatusOK, "page.html", nil) })
+	router.GET("/", func(c *gin.Context) { c.HTML(http.StatusOK, "page.html", nil) })
 
 	router.GET("/signup", func(c *gin.Context) { c.HTML(http.StatusOK, "signup.html", nil) })
 	router.POST("/signup", controllers.Signup)
@@ -28,6 +28,11 @@ func Routes(router *gin.Engine) {
 	router.POST("/login", controllers.Login)
 
 	router.GET("/getUser", controllers.SendProfileData)
+
+	router.GET("/post", controllers.UniquePost)
+	router.POST("/reply", controllers.Reply)
+
+	router.POST("/report", middleware.RequireAuth, controllers.RepostPost)
 
 	// admin
 	router.GET("/admin", middleware.RequireAdmin, controllers.Admin)
@@ -51,4 +56,5 @@ func Routes(router *gin.Engine) {
 	router.POST("/incrementLikes/:postId", controllers.IncrementLikes)
 
 	router.GET("/validate_admin", middleware.RequireAdmin)
+	router.GET("/validate_auth", middleware.RequireAuth)
 }
